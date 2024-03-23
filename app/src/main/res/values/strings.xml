@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">EcommerceApp</string>
+    <string name="product_name">Product name</string>
+    <string name="product_ratings">(16)</string>
+    <string name="product_description">lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</string>
+    <string name="product_orders">Orders : 45</string>
+    <string name="product_price">$599.89</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="categories">categories</string>
+</resources>
