@@ -1,6 +1,9 @@
 package com.example.ecommerceapp.models;
 
+import java.util.List;
+
 public class Product {
+    private Long id;
     private String label;
     private String description;
     private String image;
@@ -9,8 +12,16 @@ public class Product {
     private int evaluationCount;
     private int stock;
     private int numberOfOrders;
+    private List<Review> reviews;
+    private Category category;
 
-    private String category;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getLabel() {
         return label;
@@ -76,11 +87,19 @@ public class Product {
         this.numberOfOrders = numberOfOrders;
     }
 
-    public String getCategory() {
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 }

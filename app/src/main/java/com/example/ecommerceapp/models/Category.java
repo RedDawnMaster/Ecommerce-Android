@@ -1,14 +1,19 @@
 package com.example.ecommerceapp.models;
 
+import java.util.List;
+
 public class Category {
+    private Long id;
     private String label;
+    private int total;
+    private List<Product> products;
 
-
-    public Category() {
+    public Long getId() {
+        return id;
     }
 
-    public Category(String label, int total) {
-        this.label = label;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLabel() {
@@ -19,5 +24,19 @@ public class Category {
         this.label = label;
     }
 
+    public int getTotal() {
+        return total;
+    }
 
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 }

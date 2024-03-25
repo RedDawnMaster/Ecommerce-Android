@@ -1,4 +1,4 @@
-package com.example.ecommerceapp.viewHolders;
+package com.example.ecommerceapp.adapters;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -11,22 +11,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerceapp.R;
 
 public class ProductViewHolder extends RecyclerView.ViewHolder {
-    private ImageView productImage;
-    private TextView productName;
-    private RatingBar ratingBar;
-    private TextView productEvaluation;
-    private TextView productDescription;
-    private TextView productPrice;
-    private TextView productOrders;
+    ImageView productImage;
+    TextView productLabel;
+    RatingBar ratingBar;
+    TextView productEvaluation;
+    TextView productDescription;
+    TextView productPrice;
+    TextView productOrders;
 
     public ProductViewHolder(@NonNull View itemView) {
         super(itemView);
         productImage = itemView.findViewById(R.id.product_image);
-        productName = itemView.findViewById(R.id.product_name);
+        productLabel = itemView.findViewById(R.id.product_label);
         ratingBar = itemView.findViewById(R.id.ratingBar);
         productEvaluation = itemView.findViewById(R.id.product_evaluation);
         productDescription = itemView.findViewById(R.id.product_description);
         productPrice = itemView.findViewById(R.id.product_price);
         productOrders = itemView.findViewById(R.id.product_orders);
     }
+
 }
