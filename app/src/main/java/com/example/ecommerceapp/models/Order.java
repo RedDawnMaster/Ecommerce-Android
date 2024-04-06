@@ -11,8 +11,6 @@ public class Order {
     private Date orderDate;
     private Date deliveryDate;
     private boolean delivered;
-    private static int refundPeriod = 5;
-    private static int deliveryTime = 7;
     private User user;
     private List<OrderItem> orderItems;
 
@@ -70,22 +68,6 @@ public class Order {
 
     public void setDelivered(boolean delivered) {
         this.delivered = delivered;
-    }
-
-    public static int getRefundPeriod() {
-        return refundPeriod;
-    }
-
-    public static void setRefundPeriod(int refundPeriod) {
-        Order.refundPeriod = refundPeriod;
-    }
-
-    public static int getDeliveryTime() {
-        return deliveryTime;
-    }
-
-    public static void setDeliveryTime(int deliveryTime) {
-        Order.deliveryTime = deliveryTime;
     }
 
     public User getUser() {

@@ -6,17 +6,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/ic_home"
-        android:title="Home" />
+        android:title="@string/home" />
     <item
         android:id="@+id/orders"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/ic_shopping_bag"
-        android:title="My Orders" />
+        android:title="@string/my_orders" />
     <item
-        android:id="@+id/settings"
+        android:id="@+id/profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/ic_settings"
-        android:title="Settings" />
+        android:icon="@drawable/ic_person"
+        android:title="@string/profile" />
 </menu>

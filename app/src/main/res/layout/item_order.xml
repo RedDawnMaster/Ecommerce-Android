@@ -1,6 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_listing"
+    android:layout_margin="2dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/order_reference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/order_reference"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/order_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:layout_below="@id/order_reference"
+        android:layout_alignStart="@id/order_reference"
+        android:text="@string/order_date" />
+
+    <TextView
+        android:id="@+id/order_delivery_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/order_date"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:layout_alignStart="@id/order_reference"
+        android:layout_marginBottom="10dp"
+        android:text="@string/order_delivery_date" />
+
+    <TextView
+        android:id="@+id/order_delivered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/order_reference"
+        android:layout_alignParentEnd="true"
+        android:textSize="15sp"
+        android:padding="5dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/shape_undelivered"
+        android:text="@string/order_shipping"
+        app:drawableEndCompat="@drawable/ic_time_filled"
+        android:drawablePadding="3dp" />
+
+    <TextView
+        android:id="@+id/order_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/order_delivered"
+        android:layout_alignBottom="@id/order_delivery_date"
+        android:textColor="@color/money_green"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="@string/price" />
+
+    <TextView
+        android:id="@+id/order_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/order_delivered"
+        android:layout_above="@id/order_total"
+        android:textColor="@color/black"
+        android:text="@string/order_size"
+        android:textSize="12sp" />
+</RelativeLayout>

@@ -6,6 +6,8 @@ public class Statistic {
     private double totalSoldProducts;
     private double totalSales;
     private double totalClients;
+    private int refundPeriod = 5;
+    private int deliveryTime = 2;
 
     public Long getId() {
         return id;
@@ -45,5 +47,21 @@ public class Statistic {
 
     public void setTotalClients(double totalClients) {
         this.totalClients = totalClients;
+    }
+
+    public int getRefundPeriod() {
+        return refundPeriod;
+    }
+
+    public void setRefundPeriod(int refundPeriod) {
+        this.refundPeriod = refundPeriod;
+    }
+
+    public int getDeliveryTime() {
+        return deliveryTime;
+    }
+
+    public void setDeliveryTime(int deliveryTime) {
+        this.deliveryTime = deliveryTime;
     }
 }

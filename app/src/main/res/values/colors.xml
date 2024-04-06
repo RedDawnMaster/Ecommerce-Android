@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary">#135D66</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="grey">#474444</color>
-    <color name="green">#08594E</color>
+    <color name="grey">#EDEDED</color>
+    <color name="green">#00A645</color>
+    <color name="money_green">#08594E</color>
+    <color name="red">#970505</color>
 </resources>

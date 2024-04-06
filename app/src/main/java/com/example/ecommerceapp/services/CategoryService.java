@@ -5,7 +5,6 @@ import com.example.ecommerceapp.models.Category;
 import com.example.ecommerceapp.retrofit.RetrofitService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryService {
@@ -31,11 +30,10 @@ public class CategoryService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return getCategories();
+        return categories;
     }
 
     public List<Category> getCategories() {
-        if (categories == null) return new ArrayList<>();
         return categories;
     }
 

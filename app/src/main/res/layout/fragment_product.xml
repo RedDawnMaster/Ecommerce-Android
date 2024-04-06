@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/product_image"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/content_description"
+            app:srcCompat="@drawable/ss" />
+
+        <TextView
+            android:id="@+id/product_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_image"
+            android:text="@string/product_label"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginStart="10dp" />
+
+        <RatingBar
+            android:id="@+id/product_ratingBar"
+            style="@android:style/Widget.Material.Light.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_label"
+            android:layout_alignStart="@id/product_label"
+            android:layout_marginStart="-2dp"
+            android:numStars="5"
+            android:progressTint="#FFD600"
+            android:rating="3" />
+
+        <TextView
+            android:id="@+id/product_evaluation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/product_ratings"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_alignTop="@id/product_ratingBar"
+            android:layout_alignBottom="@id/product_ratingBar"
+            android:layout_toEndOf="@id/product_ratingBar"
+            android:layout_marginStart="10dp" />
+
+        <TextView
+            android:id="@+id/product_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/product_description"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="14sp"
+            android:layout_below="@id/product_ratingBar"
+            android:layout_alignStart="@id/product_label" />
+
+        <TextView
+            android:id="@+id/product_orders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/product_orders"
+            android:textColor="@color/black"
+            android:layout_alignStart="@id/product_description"
+            android:layout_below="@id/product_description"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/product_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/price"
+            android:textColor="@color/money_green"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_alignStart="@id/product_label"
+            android:layout_below="@id/product_orders" />
+
+        <Button
+            android:id="@+id/add_to_cart_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_price"
+            android:minHeight="48dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignStart="@id/product_label"
+            android:layout_alignEnd="@id/product_quantity"
+            android:text="@string/add_to_cart"
+            android:background="@drawable/shape_button"
+            app:backgroundTint="@color/green" />
+
+        <EditText
+            android:id="@+id/product_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_alignBottom="@id/product_price"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/shape_quantity_input"
+            android:inputType="number"
+            android:autofillHints="username"
+            android:gravity="center"
+            android:hint="@string/quantity"
+            android:textColorHint="@color/black" />
+
+        <TextView
+            android:id="@+id/reviews_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/add_to_cart_button"
+            android:text="@string/reviews"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_alignStart="@id/product_label" />
+
+        <View
+            android:id="@+id/line_break_reviews_start"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_alignEnd="@id/add_to_cart_button"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/black"
+            android:layout_toEndOf="@id/reviews_title"
+            android:layout_alignTop="@id/reviews_title"
+            android:layout_alignBottom="@id/reviews_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reviews_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_below="@id/reviews_title" />
+
+        <View
+            android:id="@+id/line_break_reviews_end"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_alignStart="@id/product_label"
+            android:layout_alignEnd="@id/add_to_cart_button"
+            android:layout_marginTop="11dp"
+            android:layout_marginBottom="11dp"
+            android:background="@color/black"
+            android:layout_below="@id/reviews_recycler" />
+
+        <EditText
+            android:id="@+id/write_review"
+            android:layout_width="match_parent"
+            android:layout_below="@id/line_break_reviews_end"
+            android:layout_height="150dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/shape_review_input"
+            android:layout_marginEnd="10dp"
+            android:hint="@string/write_a_review"
+            android:autofillHints="Write a review"
+            android:padding="5dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine" />
+
+        <RatingBar
+            android:id="@+id/rate_review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/write_review"
+            android:layout_marginStart="-20dp"
+            android:layout_marginTop="10dp"
+            android:numStars="5"
+            android:progressTint="#FFD600"
+            android:scaleX="0.75"
+            android:scaleY="0.75" />
+
+        <Button
+            android:id="@+id/post_review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/write_review"
+            android:layout_alignEnd="@id/write_review"
+            android:background="@drawable/shape_button"
+            android:layout_marginTop="13dp"
+            android:minHeight="48dp"
+            android:minWidth="100dp"
+            app:backgroundTint="@color/green"
+            android:text="@string/submit" />
+    </RelativeLayout>
+</ScrollView>

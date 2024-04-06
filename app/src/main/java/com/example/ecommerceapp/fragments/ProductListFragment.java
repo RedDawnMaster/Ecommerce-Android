@@ -11,10 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerceapp.R;
 import com.example.ecommerceapp.adapters.ProductAdapter;
-import com.example.ecommerceapp.controllers.UserController;
 import com.example.ecommerceapp.models.Product;
-import com.example.ecommerceapp.retrofit.RetrofitService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductListFragment extends Fragment {
@@ -28,12 +27,10 @@ public class ProductListFragment extends Fragment {
     }
 
     public ProductListFragment(List<Product> products) {
-        this.products = products;
-        RetrofitService retrofitService = new RetrofitService();
-        UserController userController = retrofitService.getRetrofit().create(UserController.class);
-
+        if (products == null) this.products = new ArrayList<>();
+        else
+            this.products = products;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

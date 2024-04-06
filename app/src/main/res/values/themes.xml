@@ -4,19 +4,16 @@
 
     <!-- Base application theme. -->
     <style name="Base.Theme.EcommerceApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="drawerArrowStyle">@style/DrawerArrowStyleCustom</item>
+        <item name="colorControlNormal">@color/white</item>
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>
-        <item name="searchViewStyle">@style/SearchViewCustom</item>
+        <item name="colorPrimaryDark">@color/primary</item>
     </style>
 
     <!-- My Styles -->
-    <style name="DrawerArrowStyleCustom" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="color">@color/white</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
+    <!--    <style name="DrawerArrowStyleCustom" parent="Widget.AppCompat.DrawerArrowToggle">-->
+    <!--        <item name="color">@color/white</item>-->
+    <!--        <item name="android:textColor">@color/white</item>-->
+    <!--    </style>-->
 
-    <style name="SearchViewCustom" parent="Widget.AppCompat.SearchView">
-        <item name="searchHintIcon">@drawable/ic_search</item>
-    </style>
 
 </resources>

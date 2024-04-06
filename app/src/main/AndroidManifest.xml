@@ -17,14 +17,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.AuthenticationActivity"
-            android:exported="false"
-            android:label="@string/title_activity_authentication"
-            android:theme="@style/Theme.EcommerceApp" />
+            android:name=".activities.CheckoutActivity"
+            android:exported="false" />
         <activity
-            android:name=".ui.login.LoginActivity"
-            android:exported="false"
-            android:label="@string/title_activity_login" />
+            android:name=".activities.AuthenticationActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.MainActivity"
             android:exported="true">

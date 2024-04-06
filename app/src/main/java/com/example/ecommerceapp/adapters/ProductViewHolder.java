@@ -21,13 +21,13 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
 
     public ProductViewHolder(@NonNull View itemView) {
         super(itemView);
-        productImage = itemView.findViewById(R.id.product_image);
-        productLabel = itemView.findViewById(R.id.product_label);
-        ratingBar = itemView.findViewById(R.id.ratingBar);
-        productEvaluation = itemView.findViewById(R.id.product_evaluation);
-        productDescription = itemView.findViewById(R.id.product_description);
-        productPrice = itemView.findViewById(R.id.product_price);
-        productOrders = itemView.findViewById(R.id.product_orders);
+        productImage = itemView.findViewById(R.id.product_list_image);
+        productLabel = itemView.findViewById(R.id.product_list_label);
+        ratingBar = itemView.findViewById(R.id.product_list_ratingBar);
+        productEvaluation = itemView.findViewById(R.id.product_list_evaluation);
+        productDescription = itemView.findViewById(R.id.product_list_description);
+        productPrice = itemView.findViewById(R.id.product_list_price);
+        productOrders = itemView.findViewById(R.id.product_list_orders);
     }
 
 }

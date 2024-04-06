@@ -1,14 +1,410 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Home" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/best_sellers_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/best_sellers"
+            android:textColor="@color/primary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/line_break_best_sellers"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="11dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/primary"
+            android:layout_toEndOf="@id/best_sellers_title"
+            android:layout_alignTop="@id/best_sellers_title"
+            android:layout_alignBottom="@id/best_sellers_title" />
+
+        <FrameLayout
+            android:id="@+id/best_seller_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/best_sellers_title"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/best_sellers_title"
+            android:background="@drawable/shape_home_product">
+
+            <ImageView
+                android:id="@+id/best_seller_1_image"
+                android:layout_width="164dp"
+                android:layout_height="164dp"
+                android:layout_marginBottom="50dp"
+                android:contentDescription="@string/content_description"
+                app:srcCompat="@drawable/ss" />
+
+            <TextView
+                android:id="@+id/best_seller_1_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/product_label"
+                android:textStyle="bold"
+                android:maxWidth="164dp"
+                android:maxLines="1"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="25dp" />
+
+            <TextView
+                android:id="@+id/best_seller_1_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price"
+                android:textColor="@color/money_green"
+                android:layout_marginBottom="5dp"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:layout_gravity="bottom|center" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/best_seller_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/line_break_best_sellers"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/best_sellers_title"
+            android:background="@drawable/shape_home_product">
+
+            <ImageView
+                android:id="@+id/best_seller_2_image"
+                android:layout_width="164dp"
+                android:layout_height="164dp"
+                android:layout_marginBottom="50dp"
+                android:contentDescription="@string/content_description"
+                app:srcCompat="@drawable/avatar_1" />
+
+            <TextView
+                android:id="@+id/best_seller_2_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/product_label"
+                android:textStyle="bold"
+                android:maxWidth="164dp"
+                android:maxLines="1"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="25dp" />
+
+            <TextView
+                android:id="@+id/best_seller_2_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price"
+                android:textColor="@color/money_green"
+                android:layout_marginBottom="5dp"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:layout_gravity="bottom|center" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/best_seller_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/best_sellers_title"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/best_seller_1"
+            android:background="@drawable/shape_home_product">
+
+            <ImageView
+                android:id="@+id/best_seller_3_image"
+                android:layout_width="164dp"
+                android:layout_height="164dp"
+                android:layout_marginBottom="50dp"
+                android:contentDescription="@string/content_description"
+                app:srcCompat="@drawable/avatar_1" />
+
+            <TextView
+                android:id="@+id/best_seller_3_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/product_label"
+                android:textStyle="bold"
+                android:maxWidth="164dp"
+                android:maxLines="1"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="25dp" />
+
+            <TextView
+                android:id="@+id/best_seller_3_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price"
+                android:textColor="@color/money_green"
+                android:layout_marginBottom="5dp"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:layout_gravity="bottom|center" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/best_seller_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/line_break_best_sellers"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/best_seller_2"
+            android:background="@drawable/shape_home_product">
+
+            <ImageView
+                android:id="@+id/best_seller_4_image"
+                android:layout_width="164dp"
+                android:layout_height="164dp"
+                android:layout_marginBottom="50dp"
+                android:contentDescription="@string/content_description"
+                app:srcCompat="@drawable/avatar_1" />
+
+            <TextView
+                android:id="@+id/best_seller_4_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/product_label"
+                android:textStyle="bold"
+                android:maxWidth="164dp"
+                android:maxLines="1"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="25dp" />
+
+            <TextView
+                android:id="@+id/best_seller_4_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price"
+                android:textColor="@color/money_green"
+                android:layout_marginBottom="5dp"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:layout_gravity="bottom|center" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/benefits_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_below="@id/best_seller_3"
+            android:text="@string/benefits"
+            android:textColor="@color/primary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/line_break_benefits"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="11dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/primary"
+            android:layout_toEndOf="@id/benefits_title"
+            android:layout_alignTop="@id/benefits_title"
+            android:layout_alignBottom="@id/benefits_title" />
+
+        <TextView
+            android:id="@+id/free_shipping"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:layout_below="@id/benefits_title"
+            android:layout_alignStart="@id/benefits_title"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textStyle="bold"
+            android:text="@string/free_shipping"
+            android:textSize="15sp"
+            app:drawableRightCompat="@drawable/ic_local_shipping"
+            android:background="@drawable/shape_benefit" />
+
+        <TextView
+            android:id="@+id/delivery_days"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:layout_below="@id/benefits_title"
+            android:layout_alignEnd="@id/line_break_benefits"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textStyle="bold"
+            android:text="@string/_2_days_delivery"
+            app:drawableRightCompat="@drawable/ic_access_time_filled"
+            android:textSize="15sp"
+            android:background="@drawable/shape_benefit" />
+
+        <TextView
+            android:id="@+id/refund_days"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:layout_below="@id/free_shipping"
+            android:layout_alignStart="@id/benefits_title"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textStyle="bold"
+            android:text="@string/_5_days_refund"
+            android:textSize="15sp"
+            app:drawableRightCompat="@drawable/ic_attach_money"
+            android:background="@drawable/shape_benefit" />
+
+        <TextView
+            android:id="@+id/quality_guarantee"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:layout_below="@id/delivery_days"
+            android:layout_alignEnd="@id/line_break_benefits"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textStyle="bold"
+            android:text="@string/quality_guarantee"
+            android:textSize="15sp"
+            android:background="@drawable/shape_benefit" />
+
+        <TextView
+            android:id="@+id/most_reviewed_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_below="@id/refund_days"
+            android:text="@string/most_reviewed"
+            android:textColor="@color/primary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/line_break_most_reviewed"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="11dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/primary"
+            android:layout_toEndOf="@id/most_reviewed_title"
+            android:layout_alignTop="@id/most_reviewed_title"
+            android:layout_alignBottom="@id/most_reviewed_title" />
+
+        <FrameLayout
+            android:id="@+id/most_reviewed_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/most_reviewed_title"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/most_reviewed_title"
+            android:background="@drawable/shape_home_product">
+
+            <ImageView
+                android:id="@+id/most_reviewed_1_image"
+                android:layout_width="164dp"
+                android:layout_height="164dp"
+                android:layout_marginBottom="50dp"
+                android:contentDescription="@string/content_description"
+                app:srcCompat="@drawable/avatar_1" />
+
+            <TextView
+                android:id="@+id/most_reviewed_1_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/product_label"
+                android:textStyle="bold"
+                android:maxWidth="164dp"
+                android:maxLines="1"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="25dp" />
+
+            <TextView
+                android:id="@+id/most_reviewed_1_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price"
+                android:textColor="@color/money_green"
+                android:layout_marginBottom="5dp"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:layout_gravity="bottom|center" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/most_reviewed_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/line_break_most_reviewed"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/most_reviewed_title"
+            android:background="@drawable/shape_home_product">
+
+            <ImageView
+                android:id="@+id/most_reviewed_2_image"
+                android:layout_width="164dp"
+                android:layout_height="164dp"
+                android:layout_marginBottom="50dp"
+                android:contentDescription="@string/content_description"
+                app:srcCompat="@drawable/avatar_1" />
+
+            <TextView
+                android:id="@+id/most_reviewed_2_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/product_label"
+                android:textStyle="bold"
+                android:maxWidth="164dp"
+                android:maxLines="1"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="25dp" />
+
+            <TextView
+                android:id="@+id/most_reviewed_2_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price"
+                android:textColor="@color/money_green"
+                android:layout_marginBottom="5dp"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:layout_gravity="bottom|center" />
+        </FrameLayout>
+    </RelativeLayout>
+</ScrollView>

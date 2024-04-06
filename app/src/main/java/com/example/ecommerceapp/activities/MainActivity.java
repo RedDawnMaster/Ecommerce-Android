@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -20,6 +22,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.ecommerceapp.R;
+import com.example.ecommerceapp.fragments.HomeFragment;
 import com.example.ecommerceapp.fragments.OrderListFragment;
 import com.example.ecommerceapp.fragments.ProductListFragment;
 import com.example.ecommerceapp.models.Category;
@@ -30,18 +33,21 @@ import com.example.ecommerceapp.services.UserService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
+    private int currentPos;
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private BottomNavigationView bottomNavigationView;
 
-    private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), o -> {
-
+    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), o -> {
+        if (o.getResultCode() == 0) {
+        }
     });
 
     private void initComponents() {
@@ -52,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        toolbar.setTitle("Amazon");
+        toolbar.setTitle("E-App");
         setSupportActionBar(toolbar);
     }
 
@@ -68,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                     getSupportFragmentManager().popBackStackImmediate();
-                    Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
                     String tag = currentFragment.getTag();
                     switch (tag) {
                         case "home":
@@ -78,9 +84,8 @@ public class MainActivity extends AppCompatActivity {
                             bottomNavigationView.getMenu().findItem(R.id.orders).setChecked(true);
                             break;
                         case "settings":
-                            bottomNavigationView.getMenu().findItem(R.id.settings).setChecked(true);
+                            bottomNavigationView.getMenu().findItem(R.id.profile).setChecked(true);
                             break;
-
                     }
                 }
 
@@ -94,21 +99,23 @@ public class MainActivity extends AppCompatActivity {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
                 item.setChecked(true);
-                replaceFragment(new ProductListFragment(ProductService.getInstance().getProducts()), "home");
+                replaceFragment(new HomeFragment(), "home", true);
             } else if (itemId == R.id.orders) {
                 item.setChecked(true);
                 if (UserService.getInstance().getUser() != null)
-                    replaceFragment(new OrderListFragment(), "orders");
+                    replaceFragment(new OrderListFragment(), "orders", true);
                 else {
                     Intent intent = new Intent(this, AuthenticationActivity.class);
+                    currentPos = 0;
                     activityResultLauncher.launch(intent);
                 }
-            } else if (itemId == R.id.settings) {
+            } else if (itemId == R.id.profile) {
                 item.setChecked(true);
                 if (UserService.getInstance().getUser() != null)
-                    replaceFragment(new OrderListFragment(), "settings");
+                    replaceFragment(new OrderListFragment(), "profile", true);
                 else {
                     Intent intent = new Intent(this, AuthenticationActivity.class);
+                    currentPos = 1;
                     activityResultLauncher.launch(intent);
                 }
             }
@@ -119,16 +126,23 @@ public class MainActivity extends AppCompatActivity {
     private void loadData() {
         Menu menu = navigationView.getMenu();
         Thread thread = new Thread(() -> {
-            List<Category> categories = CategoryService.getInstance().findAll();
-            List<Product> products = ProductService.getInstance().findAll();
+            CategoryService.getInstance().findAll();
+            ProductService.getInstance().findAll();
+            List<Category> categories;
+            List<Product> products;
+            if (CategoryService.getInstance().getCategories() == null)
+                categories = new ArrayList<>();
+            else categories = CategoryService.getInstance().getCategories();
+            if (ProductService.getInstance().getProducts() == null) products = new ArrayList<>();
+            else products = ProductService.getInstance().getProducts();
             runOnUiThread(() -> {
-                replaceFragment(new ProductListFragment(products), "home");
+                replaceFragment(new HomeFragment(), "home", false);
                 for (int i = 0; i < categories.size(); i++) {
                     Category category = categories.get(i);
                     menu.add(Menu.NONE, Menu.FIRST + i, Menu.NONE, category.getLabel());
                 }
                 navigationView.setNavigationItemSelectedListener(item -> {
-                    replaceFragment(new ProductListFragment(ProductService.getInstance().getProducts().stream().filter(p -> p.getCategory().getLabel().equals(item.getTitle().toString())).collect(Collectors.toList())), null);
+                    replaceFragment(new ProductListFragment(products.stream().filter(p -> p.getCategory().getLabel().equals(item.getTitle().toString())).collect(Collectors.toList())), item.getTitle().toString(), true);
                     return false;
                 });
             });
@@ -136,11 +150,11 @@ public class MainActivity extends AppCompatActivity {
         thread.start();
     }
 
-    private void replaceFragment(Fragment fragment, String name) {
+    private void replaceFragment(Fragment fragment, String name, boolean bool) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment, name);
-        fragmentTransaction.addToBackStack(name);
+        fragmentTransaction.replace(R.id.main_fragment_container, fragment, name);
+        if (bool) fragmentTransaction.addToBackStack(name);
         fragmentTransaction.commit();
     }
 
@@ -159,14 +173,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
-        MenuItem menuItem = menu.findItem(R.id.search_product);
-        MenuItem menuItem1 = menu.findItem(R.id.cart);
-        SearchView searchView = (SearchView) menuItem.getActionView();
+        MenuItem search = menu.findItem(R.id.search_product);
+        SearchView searchView = (SearchView) search.getActionView();
+        assert searchView != null;
         searchView.setQueryHint("Search product");
         EditText searchPlate = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         searchPlate.setTextColor(getResources().getColor(R.color.white));
         searchPlate.setHintTextColor(getResources().getColor(R.color.white));
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -181,4 +194,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.cart)
+            Toast.makeText(this, "Hola", Toast.LENGTH_SHORT).show();
+        return super.onOptionsItemSelected(item);
+    }
 }

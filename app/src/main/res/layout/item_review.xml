@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_listing"
+    android:layout_margin="2dp">
+
+    <TextView
+        android:id="@+id/review_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/firstname_lastname"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp" />
+
+    <RatingBar
+        android:id="@+id/review_ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.Material.Light.RatingBar.Small"
+        android:layout_below="@id/review_username"
+        android:layout_marginStart="-2dp"
+        android:layout_alignStart="@id/review_username"
+        android:numStars="5"
+        android:progressTint="#FFD600"
+        android:rating="3" />
+
+    <TextView
+        android:id="@+id/review_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/product_description"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_below="@id/review_ratingBar"
+        android:layout_alignStart="@id/review_username"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="2dp" />
+
+</RelativeLayout>
