@@ -27,10 +27,10 @@ public class CategoryService {
     public List<Category> findAll() {
         try {
             categories = categoryController.findAll().execute().body();
+            return categories;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return categories;
     }
 
     public List<Category> getCategories() {

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ public class ProductListFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ProductAdapter productAdapter;
+    private TextView noProducts;
     private List<Product> products;
 
     public ProductListFragment() {
@@ -36,10 +38,16 @@ public class ProductListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
+        noProducts = view.findViewById(R.id.no_products);
         recyclerView = view.findViewById(R.id.products_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        productAdapter = new ProductAdapter(products);
+        productAdapter = new ProductAdapter(getContext(), products);
         recyclerView.setAdapter(productAdapter);
+        if (products.isEmpty()) noProducts.setVisibility(View.VISIBLE);
         return view;
+    }
+
+    public ProductAdapter getProductAdapter() {
+        return productAdapter;
     }
 }

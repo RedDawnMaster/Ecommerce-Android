@@ -1,7 +1,11 @@
 package com.example.ecommerceapp.services;
 
 import com.example.ecommerceapp.controllers.ReviewController;
+import com.example.ecommerceapp.models.Review;
 import com.example.ecommerceapp.retrofit.RetrofitService;
+
+import java.io.IOException;
+import java.util.List;
 
 public class ReviewService {
     private static ReviewService reviewService;
@@ -18,7 +22,21 @@ public class ReviewService {
         return reviewService;
     }
 
-    public ReviewController getReviewController() {
-        return reviewController;
+    public List<Review> findByProductLabel(String label) {
+        try {
+            return reviewController.findByProductLabel(label).execute().body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    public Review save(Review review) {
+        try {
+            return reviewController.save(review).execute().body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/products_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_shopping_basket"
+        android:title="@string/products" />
+    <item
+        android:id="@+id/users_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_manage_accounts"
+        android:title="@string/users" />
+    <item
+        android:id="@+id/settings_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings" />
+</menu>

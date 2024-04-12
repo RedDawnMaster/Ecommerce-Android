@@ -10,6 +10,14 @@ public class Review {
     private User user;
     private Product product;
 
+    public Review(String description, double stars, Date date, User user, Product product) {
+        this.description = description;
+        this.stars = stars;
+        this.date = date;
+        this.user = user;
+        this.product = product;
+    }
+
     public Long getId() {
         return id;
     }

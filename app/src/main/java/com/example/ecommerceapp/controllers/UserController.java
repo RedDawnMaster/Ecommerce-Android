@@ -13,8 +13,8 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface UserController {
-    @GET("/api/user/{email},{password}")
-    public Call<User> login(@Path("email") String email, @Path("password") String password);
+    @GET("/api/user/{username}/{password}")
+    public Call<User> login(@Path("username") String username, @Path("password") String password);
 
     @GET("/api/user/username/{username}")
     public Call<List<User>> findByUsernameContains(@Path("username") String username);
@@ -41,5 +41,5 @@ public interface UserController {
     public Call<User> register(@Body User user);
 
     @PUT("/api/user/")
-    public Call<Integer> update(@Body User user);
+    public Call<User> update(@Body User user);
 }

@@ -4,7 +4,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/product_label"
+            android:background="@color/ratingBg"
             android:layout_alignStart="@id/product_label"
             android:layout_marginStart="-2dp"
             android:numStars="5"
@@ -152,6 +154,20 @@
             android:layout_height="400dp"
             android:layout_below="@id/reviews_title" />
 
+        <!--        <TextView-->
+        <!--            android:id="@+id/no_reviews"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_below="@id/line_break_reviews_start"-->
+        <!--            android:layout_centerHorizontal="true"-->
+        <!--            android:text="@string/no_reviews_yet"-->
+        <!--            android:textSize="18sp"-->
+        <!--            android:textStyle="bold"-->
+        <!--            android:textColor="@color/primary"-->
+        <!--            android:layout_marginTop="20dp"-->
+        <!--            android:layout_marginBottom="100dp"-->
+        <!--            android:visibility="visible" />-->
+
         <View
             android:id="@+id/line_break_reviews_end"
             android:layout_width="match_parent"
@@ -184,9 +200,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/write_review"
             android:layout_marginStart="-20dp"
+            android:background="@color/ratingBg"
             android:layout_marginTop="10dp"
+            android:isIndicator="false"
             android:numStars="5"
             android:progressTint="#FFD600"
+            android:rating="0"
             android:scaleX="0.75"
             android:scaleY="0.75" />
 

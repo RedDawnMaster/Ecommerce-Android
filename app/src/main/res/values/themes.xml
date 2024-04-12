@@ -15,5 +15,27 @@
     <!--        <item name="android:textColor">@color/white</item>-->
     <!--    </style>-->
 
+    <style name="Failure">
+        <item name="stTextBold">true</item>
+        <item name="stTextColor">#fff</item>
+        <item name="stTextSize">14sp</item>
+        <item name="stColorBackground">@color/error</item>
+        <item name="stSolidBackground">false</item>
+        <item name="stIconEnd">@drawable/ic_error</item>
+        <item name="stLength">LONG</item>
+        <item name="stRadius">13dp</item>
+    </style>
+
+    <style name="Success">
+        <item name="stTextBold">true</item>
+        <item name="stTextColor">#fff</item>
+        <item name="stTextSize">14sp</item>
+        <item name="stColorBackground">@color/green</item>
+        <item name="stSolidBackground">false</item>
+        <item name="stIconEnd">@drawable/ic_success</item>
+        <item name="stLength">SHORT</item>
+        <item name="stRadius">13dp</item>
+    </style>
+
 
 </resources>

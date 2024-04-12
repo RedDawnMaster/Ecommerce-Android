@@ -23,16 +23,15 @@
     <string name="order_delivery_date">Delivery date : 20/02/2024</string>
     <string name="order_delivered">Delivered</string>
     <string name="order_shipping">Shipping</string>
-    <string name="order_size">(5 items)</string>
+    <string name="order_size">5 item(s)</string>
     <string name="content_description">Product image</string>
     <string name="item_quantity">Quantity : 10</string>
     <string name="refund">refund</string>
     <string name="remove_cart_item">Remove cart item</string>
-    <string name="save">Save</string>
     <string name="home">Home</string>
     <string name="my_orders">My Orders</string>
-    <string name="profile">Profile</string>
-    <string name="profile_settings">Profile settings</string>
+    <string name="account">Account</string>
+    <string name="account_settings">Account settings</string>
     <string name="firstname_lastname">Soufiane Abahamid</string>
     <string name="add_to_cart">Add to cart</string>
     <string name="quantity">Quantity</string>
@@ -61,4 +60,19 @@
     <string name="search">Search</string>
     <string name="cart">Cart</string>
     <string name="submit_order">Submit Order</string>
+    <string name="log_out">Log out</string>
+    <string name="update">update</string>
+    <string name="change_password">Change Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm">Confirm</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="you_have_no_orders">You have no orders</string>
+    <string name="no_products_found">No products found</string>
+    <string name="no_reviews_yet">No reviews yet</string>
+    <string name="products">Products</string>
+    <string name="users">Users</string>
+    <string name="settings">Settings</string>
+
 </resources>

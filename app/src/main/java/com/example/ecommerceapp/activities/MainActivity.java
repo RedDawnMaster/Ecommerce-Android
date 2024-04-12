@@ -1,11 +1,12 @@
 package com.example.ecommerceapp.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,31 +23,89 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.ecommerceapp.R;
+import com.example.ecommerceapp.adapters.CartItemAdapter;
+import com.example.ecommerceapp.adapters.OrderAdapter;
+import com.example.ecommerceapp.adapters.OrderItemAdapter;
+import com.example.ecommerceapp.adapters.ProductAdapter;
+import com.example.ecommerceapp.fragments.AccountFragment;
+import com.example.ecommerceapp.fragments.CartItemListFragment;
 import com.example.ecommerceapp.fragments.HomeFragment;
+import com.example.ecommerceapp.fragments.OrderItemListFragment;
 import com.example.ecommerceapp.fragments.OrderListFragment;
 import com.example.ecommerceapp.fragments.ProductListFragment;
+import com.example.ecommerceapp.models.CartItem;
 import com.example.ecommerceapp.models.Category;
+import com.example.ecommerceapp.models.Order;
+import com.example.ecommerceapp.models.OrderItem;
 import com.example.ecommerceapp.models.Product;
+import com.example.ecommerceapp.models.User;
+import com.example.ecommerceapp.services.CartItemService;
+import com.example.ecommerceapp.services.CartService;
 import com.example.ecommerceapp.services.CategoryService;
+import com.example.ecommerceapp.services.LoginManager;
+import com.example.ecommerceapp.services.OrderItemService;
+import com.example.ecommerceapp.services.OrderService;
 import com.example.ecommerceapp.services.ProductService;
+import com.example.ecommerceapp.services.StatisticService;
 import com.example.ecommerceapp.services.UserService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class MainActivity extends AppCompatActivity {
-    private int currentPos;
+import io.github.muddz.styleabletoast.StyleableToast;
 
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private BottomNavigationView bottomNavigationView;
 
+    private int requestCode;
+
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), o -> {
-        if (o.getResultCode() == 0) {
+        int resultCode = o.getResultCode();
+        getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (resultCode == Activity.RESULT_OK) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    loadOrdersAndCart();
+                    switch (requestCode) {
+                        case 0:
+                            replaceFragment(new OrderListFragment(OrderService.getInstance().getOrders()), "Orders", true);
+                            runOnUiThread(() -> StyleableToast.makeText(MainActivity.this, "Login successful", R.style.Success).show());
+                            break;
+                        case 1:
+                            replaceFragment(new AccountFragment(), "Account", true);
+                            runOnUiThread(() -> StyleableToast.makeText(MainActivity.this, "Login successful", R.style.Success).show());
+                            break;
+                        case 2:
+                            replaceFragment(new CartItemListFragment(CartItemService.getInstance().getCartItems()), "Cart", true);
+                            runOnUiThread(() -> StyleableToast.makeText(MainActivity.this, "Login successful", R.style.Success).show());
+                            break;
+                        case 3:
+                            replaceFragment(new OrderListFragment(OrderService.getInstance().getOrders()), "Orders", true);
+                            runOnUiThread(() -> StyleableToast.makeText(MainActivity.this, "Order placed", R.style.Success).show());
+                            List<Integer> quantities = ProductService.getInstance().getQuantities();
+                            List<Product> products = ProductService.getInstance().getBoughProducts();
+                            for (int i = 0; i < products.size(); i++) {
+                                Product product = products.get(i);
+                                product.setNumberOfOrders(product.getNumberOfOrders() + quantities.get(i));
+                            }
+                        default:
+                    }
+                }
+            });
+            thread.start();
+        } else if (resultCode == Activity.RESULT_CANCELED && o.getData() != null) {
+            String error = o.getData().getStringExtra("error");
+            StyleableToast.makeText(this, error, R.style.Failure).show();
+            ProductService.getInstance().setBoughProducts(null);
+            ProductService.getInstance().setQuantities(null);
         }
     });
 
@@ -75,20 +134,22 @@ public class MainActivity extends AppCompatActivity {
                 } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                     getSupportFragmentManager().popBackStackImmediate();
                     Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
-                    String tag = currentFragment.getTag();
-                    switch (tag) {
-                        case "home":
-                            bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
-                            break;
-                        case "orders":
-                            bottomNavigationView.getMenu().findItem(R.id.orders).setChecked(true);
-                            break;
-                        case "settings":
-                            bottomNavigationView.getMenu().findItem(R.id.profile).setChecked(true);
-                            break;
+                    if (currentFragment != null) {
+                        String tag = currentFragment.getTag();
+                        switch (Objects.requireNonNull(tag)) {
+                            case "Orders":
+                                bottomNavigationView.getMenu().findItem(R.id.orders).setChecked(true);
+                                break;
+                            case "Account":
+                                bottomNavigationView.getMenu().findItem(R.id.account).setChecked(true);
+                                break;
+                            case "Home":
+                                currentFragment.getView().setVisibility(View.GONE);
+                                replaceFragment(new HomeFragment(), "Home", true);
+                                bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
+                        }
                     }
-                }
-
+                } else finish();
             }
         };
         getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
@@ -99,23 +160,23 @@ public class MainActivity extends AppCompatActivity {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
                 item.setChecked(true);
-                replaceFragment(new HomeFragment(), "home", true);
+                replaceFragment(new HomeFragment(), "Home", true);
             } else if (itemId == R.id.orders) {
                 item.setChecked(true);
                 if (UserService.getInstance().getUser() != null)
-                    replaceFragment(new OrderListFragment(), "orders", true);
+                    replaceFragment(new OrderListFragment(OrderService.getInstance().getOrders()), "Orders", true);
                 else {
                     Intent intent = new Intent(this, AuthenticationActivity.class);
-                    currentPos = 0;
+                    requestCode = 0;
                     activityResultLauncher.launch(intent);
                 }
-            } else if (itemId == R.id.profile) {
+            } else if (itemId == R.id.account) {
                 item.setChecked(true);
                 if (UserService.getInstance().getUser() != null)
-                    replaceFragment(new OrderListFragment(), "profile", true);
+                    replaceFragment(new AccountFragment(), "Account", true);
                 else {
                     Intent intent = new Intent(this, AuthenticationActivity.class);
-                    currentPos = 1;
+                    requestCode = 1;
                     activityResultLauncher.launch(intent);
                 }
             }
@@ -128,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
         Thread thread = new Thread(() -> {
             CategoryService.getInstance().findAll();
             ProductService.getInstance().findAll();
+            StatisticService.getInstance().findById();
             List<Category> categories;
             List<Product> products;
             if (CategoryService.getInstance().getCategories() == null)
@@ -136,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             if (ProductService.getInstance().getProducts() == null) products = new ArrayList<>();
             else products = ProductService.getInstance().getProducts();
             runOnUiThread(() -> {
-                replaceFragment(new HomeFragment(), "home", false);
+                replaceFragment(new HomeFragment(), "Home", true);
                 for (int i = 0; i < categories.size(); i++) {
                     Category category = categories.get(i);
                     menu.add(Menu.NONE, Menu.FIRST + i, Menu.NONE, category.getLabel());
@@ -150,7 +212,29 @@ public class MainActivity extends AppCompatActivity {
         thread.start();
     }
 
-    private void replaceFragment(Fragment fragment, String name, boolean bool) {
+    private void loadOrdersAndCart() {
+        User user = UserService.getInstance().getUser();
+        if (user != null) {
+            OrderService.getInstance().findByUserUsername(user.getUsername());
+            CartService.getInstance().findByUserUsername(user.getUsername());
+            CartItemService.getInstance().setCartItems(CartService.getInstance().getCart().getCartItems());
+        } else {
+            LoginManager.removeCredentials(this);
+        }
+    }
+
+    private void checkLoggedIn() {
+        String[] credentials = LoginManager.getCredentials(this);
+        if (credentials != null) {
+            Thread thread = new Thread(() -> {
+                UserService.getInstance().login(credentials[0], credentials[1]);
+                loadOrdersAndCart();
+            });
+            thread.start();
+        }
+    }
+
+    public void replaceFragment(Fragment fragment, String name, boolean bool) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment_container, fragment, name);
@@ -168,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
         initDrawer();
         initBottomNav();
         loadData();
+        checkLoggedIn();
     }
 
     @Override
@@ -175,29 +260,115 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
         MenuItem search = menu.findItem(R.id.search_product);
         SearchView searchView = (SearchView) search.getActionView();
-        assert searchView != null;
         searchView.setQueryHint("Search product");
         EditText searchPlate = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         searchPlate.setTextColor(getResources().getColor(R.color.white));
         searchPlate.setHintTextColor(getResources().getColor(R.color.white));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
+        searchView.setOnQueryTextListener(this);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    // replace later by backend api instead of searching in frontend
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
+        if (currentFragment != null) {
+            String tag = currentFragment.getTag();
+            switch (Objects.requireNonNull(tag)) {
+                case "Orders":
+                    OrderAdapter orderAdapter = ((OrderListFragment) currentFragment).getOrderAdapter();
+                    List<Order> orders = OrderService.getInstance().getOrders();
+                    if (!query.isEmpty()) {
+                        List<Order> foundOrders = new ArrayList<>();
+                        for (Order order : orders) {
+                            if (order.getReference().toLowerCase().contains(query.toLowerCase()))
+                                foundOrders.add(order);
+                        }
+                        orderAdapter.setOrders(foundOrders);
+                    } else orderAdapter.setOrders(orders);
+                    orderAdapter.notifyDataSetChanged();
+                    break;
+                case "Cart":
+                    CartItemAdapter cartItemAdapter = ((CartItemListFragment) currentFragment).getCartItemAdapter();
+                    List<CartItem> cartItems = CartItemService.getInstance().getCartItems();
+                    if (!query.isEmpty()) {
+                        List<CartItem> foundCartItems = new ArrayList<>();
+                        for (CartItem cartItem : cartItems) {
+                            if (cartItem.getProduct().getLabel().toLowerCase().contains(query.toLowerCase()))
+                                foundCartItems.add(cartItem);
+                        }
+                        cartItemAdapter.setCartItems(foundCartItems);
+                    } else cartItemAdapter.setCartItems(cartItems);
+                    cartItemAdapter.notifyDataSetChanged();
+                    break;
+                case "OrderItems":
+                    OrderItemAdapter orderItemAdapter = ((OrderItemListFragment) currentFragment).getOrderItemAdapter();
+                    List<OrderItem> orderItems = OrderItemService.getInstance().getOrderItems();
+                    if (!query.isEmpty()) {
+                        List<OrderItem> foundOrderItems = new ArrayList<>();
+                        for (OrderItem orderItem : orderItems) {
+                            if (orderItem.getProduct().getLabel().toLowerCase().contains(query.toLowerCase()))
+                                foundOrderItems.add(orderItem);
+                        }
+                        orderItemAdapter.setOrderItems(foundOrderItems);
+                    } else orderItemAdapter.setOrderItems(orderItems);
+                    orderItemAdapter.notifyDataSetChanged();
+                    break;
+                default:
+                    ProductAdapter productAdapter;
+                    List<Product> products = ProductService.getInstance().getProducts();
+                    if (currentFragment instanceof ProductListFragment) {
+                        productAdapter = ((ProductListFragment) currentFragment).getProductAdapter();
+                        if (!query.isEmpty()) {
+                            List<Product> foundProducts = new ArrayList<>();
+                            for (Product product : products) {
+                                if (product.getLabel().toLowerCase().contains(query.toLowerCase()))
+                                    foundProducts.add(product);
+                            }
+                            productAdapter.setProducts(foundProducts);
+                        } else
+                            productAdapter.setProducts(products);
+                        productAdapter.notifyDataSetChanged();
+                    } else
+                        replaceFragment(new ProductListFragment(products), "Products", true);
+                    break;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (newText.isEmpty()) this.onQueryTextSubmit(newText);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.cart)
-            Toast.makeText(this, "Hola", Toast.LENGTH_SHORT).show();
+            if (UserService.getInstance().getUser() != null)
+                replaceFragment(new CartItemListFragment(CartItemService.getInstance().getCartItems()), "Cart", true);
+            else {
+                Intent intent = new Intent(this, AuthenticationActivity.class);
+                requestCode = 2;
+                activityResultLauncher.launch(intent);
+            }
         return super.onOptionsItemSelected(item);
+    }
+
+    public BottomNavigationView getBottomNavigationView() {
+        return bottomNavigationView;
+    }
+
+    public int getRequestCode() {
+        return requestCode;
+    }
+
+    public void setRequestCode(int requestCode) {
+        this.requestCode = requestCode;
+    }
+
+    public ActivityResultLauncher<Intent> getActivityResultLauncher() {
+        return activityResultLauncher;
     }
 }

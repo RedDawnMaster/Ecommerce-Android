@@ -2,9 +2,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background">
 
     <RelativeLayout
+        android:id="@+id/home_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -42,7 +44,7 @@
             android:background="@drawable/shape_home_product">
 
             <ImageView
-                android:id="@+id/best_seller_1_image"
+                android:id="@+id/best_seller_image_1"
                 android:layout_width="164dp"
                 android:layout_height="164dp"
                 android:layout_marginBottom="50dp"
@@ -50,7 +52,7 @@
                 app:srcCompat="@drawable/ss" />
 
             <TextView
-                android:id="@+id/best_seller_1_label"
+                android:id="@+id/best_seller_label_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/product_label"
@@ -64,7 +66,7 @@
                 android:layout_marginBottom="25dp" />
 
             <TextView
-                android:id="@+id/best_seller_1_price"
+                android:id="@+id/best_seller_price_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/price"
@@ -85,7 +87,7 @@
             android:background="@drawable/shape_home_product">
 
             <ImageView
-                android:id="@+id/best_seller_2_image"
+                android:id="@+id/best_seller_image_2"
                 android:layout_width="164dp"
                 android:layout_height="164dp"
                 android:layout_marginBottom="50dp"
@@ -93,7 +95,7 @@
                 app:srcCompat="@drawable/avatar_1" />
 
             <TextView
-                android:id="@+id/best_seller_2_label"
+                android:id="@+id/best_seller_label_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/product_label"
@@ -107,7 +109,7 @@
                 android:layout_marginBottom="25dp" />
 
             <TextView
-                android:id="@+id/best_seller_2_price"
+                android:id="@+id/best_seller_price_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/price"
@@ -128,7 +130,7 @@
             android:background="@drawable/shape_home_product">
 
             <ImageView
-                android:id="@+id/best_seller_3_image"
+                android:id="@+id/best_seller_image_3"
                 android:layout_width="164dp"
                 android:layout_height="164dp"
                 android:layout_marginBottom="50dp"
@@ -136,7 +138,7 @@
                 app:srcCompat="@drawable/avatar_1" />
 
             <TextView
-                android:id="@+id/best_seller_3_label"
+                android:id="@+id/best_seller_label_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/product_label"
@@ -150,7 +152,7 @@
                 android:layout_marginBottom="25dp" />
 
             <TextView
-                android:id="@+id/best_seller_3_price"
+                android:id="@+id/best_seller_price_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/price"
@@ -171,7 +173,7 @@
             android:background="@drawable/shape_home_product">
 
             <ImageView
-                android:id="@+id/best_seller_4_image"
+                android:id="@+id/best_seller_image_4"
                 android:layout_width="164dp"
                 android:layout_height="164dp"
                 android:layout_marginBottom="50dp"
@@ -179,7 +181,7 @@
                 app:srcCompat="@drawable/avatar_1" />
 
             <TextView
-                android:id="@+id/best_seller_4_label"
+                android:id="@+id/best_seller_label_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/product_label"
@@ -193,7 +195,7 @@
                 android:layout_marginBottom="25dp" />
 
             <TextView
-                android:id="@+id/best_seller_4_price"
+                android:id="@+id/best_seller_price_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/price"
@@ -331,7 +333,7 @@
             android:background="@drawable/shape_home_product">
 
             <ImageView
-                android:id="@+id/most_reviewed_1_image"
+                android:id="@+id/most_reviewed_image_1"
                 android:layout_width="164dp"
                 android:layout_height="164dp"
                 android:layout_marginBottom="50dp"
@@ -339,7 +341,7 @@
                 app:srcCompat="@drawable/avatar_1" />
 
             <TextView
-                android:id="@+id/most_reviewed_1_label"
+                android:id="@+id/most_reviewed_label_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/product_label"
@@ -353,7 +355,7 @@
                 android:layout_marginBottom="25dp" />
 
             <TextView
-                android:id="@+id/most_reviewed_1_price"
+                android:id="@+id/most_reviewed_price_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/price"
@@ -374,7 +376,7 @@
             android:background="@drawable/shape_home_product">
 
             <ImageView
-                android:id="@+id/most_reviewed_2_image"
+                android:id="@+id/most_reviewed_image_2"
                 android:layout_width="164dp"
                 android:layout_height="164dp"
                 android:layout_marginBottom="50dp"
@@ -382,7 +384,7 @@
                 app:srcCompat="@drawable/avatar_1" />
 
             <TextView
-                android:id="@+id/most_reviewed_2_label"
+                android:id="@+id/most_reviewed_label_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/product_label"
@@ -396,7 +398,7 @@
                 android:layout_marginBottom="25dp" />
 
             <TextView
-                android:id="@+id/most_reviewed_2_price"
+                android:id="@+id/most_reviewed_price_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/price"
