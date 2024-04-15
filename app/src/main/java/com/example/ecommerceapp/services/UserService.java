@@ -5,6 +5,7 @@ import com.example.ecommerceapp.models.User;
 import com.example.ecommerceapp.retrofit.RetrofitService;
 
 import java.io.IOException;
+import java.util.List;
 
 public class UserService {
     private static UserService userService;
@@ -12,6 +13,7 @@ public class UserService {
     private UserController userController;
 
     private User user;
+    private List<User> users;
 
     private UserService() {
         RetrofitService retrofitService = new RetrofitService();
@@ -53,11 +55,32 @@ public class UserService {
 
     }
 
+    public List<User> findByRole(String role) {
+        try {
+            return users = userController.findByRole(role).execute().body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteByUsername(String username) {
+        try {
+            userController.deleteByUsername(username).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+
+    public List<User> getUsers() {
+        return users;
     }
 }

@@ -1,23 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background">
 
+    <Button
+        android:id="@+id/add_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_category"
+        android:background="@drawable/shape_button"
+        app:backgroundTint="@color/blue"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:minWidth="170dp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/add_product"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_product"
+        android:background="@drawable/shape_button"
+        app:backgroundTint="@color/green"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/add_category"
+        android:minWidth="170dp"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/add_product"
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:id="@+id/no_products"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
         android:text="@string/no_products_found"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/primary"
         android:visibility="gone" />
-</FrameLayout>
+</RelativeLayout>

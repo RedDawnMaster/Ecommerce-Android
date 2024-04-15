@@ -1,6 +1,7 @@
 package com.example.ecommerceapp.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerceapp.R;
 import com.example.ecommerceapp.activities.MainActivity;
+import com.example.ecommerceapp.fragments.AdminProductFragment;
 import com.example.ecommerceapp.fragments.CartItemListFragment;
 import com.example.ecommerceapp.fragments.ProductFragment;
 import com.example.ecommerceapp.models.CartItem;
@@ -39,23 +41,34 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemViewHolder> {
         this.cartItems = cartItems;
     }
 
-    private void removeCartItem(CartItem cartItem, int postion) {
+    private void removeCartItem(CartItem cartItem, int position) {
         {
-            Thread thread = new Thread(() -> {
-                CartItemService.getInstance().deleteByProductLabelAndCartUserUsername(cartItem.getProduct().getLabel(), UserService.getInstance().getUser().getUsername());
-                CartService.getInstance().getCart().getCartItems().remove(cartItem);
-                MainActivity mainActivity = (MainActivity) context;
-                mainActivity.runOnUiThread(() -> {
-                    this.notifyItemRemoved(postion);
-                    if (getItemCount() == 0) {
-                        noCartItems.setVisibility(View.VISIBLE);
-                        cartItemListFragment.disableCheckout();
-                    }
+            MainActivity mainActivity = (MainActivity) context;
+            AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
+            builder.setTitle("Confirmation");
+            builder.setMessage("Are you sure you want to remove this product?");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                Thread thread = new Thread(() -> {
+                    CartItemService.getInstance().deleteByProductLabelAndCartUserUsername(cartItem.getProduct().getLabel(), UserService.getInstance().getUser().getUsername());
+                    CartService.getInstance().getCart().getCartItems().remove(cartItem);
+                    mainActivity.runOnUiThread(() -> {
+                        this.notifyItemRemoved(position);
+                        if (getItemCount() == 0) {
+                            noCartItems.setVisibility(View.VISIBLE);
+                            cartItemListFragment.disableCheckout();
+                        }
 
-                    StyleableToast.makeText(context, "Product removed", R.style.Success).show();
+                        StyleableToast.makeText(context, "Product removed", R.style.Success).show();
+                    });
                 });
+                thread.start();
+                dialog.dismiss();
             });
-            thread.start();
+            builder.setNegativeButton("No", (dialog, which) -> {
+                dialog.dismiss();
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     }
 
@@ -63,7 +76,10 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemViewHolder> {
         MainActivity mainActivity = (MainActivity) context;
         Thread thread = new Thread(() -> {
             List<Review> reviews = ReviewService.getInstance().findByProductLabel(product.getLabel());
-            mainActivity.runOnUiThread(() -> mainActivity.replaceFragment(new ProductFragment(product, reviews), "Product", true));
+            if (UserService.getInstance().getUser().getRole().equals("ADMIN"))
+                mainActivity.runOnUiThread(() -> mainActivity.replaceFragment(new AdminProductFragment(product, reviews, null), "Product", true));
+            else
+                mainActivity.runOnUiThread(() -> mainActivity.replaceFragment(new ProductFragment(product, reviews), "Product", true));
         });
         thread.start();
     }
@@ -82,9 +98,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemViewHolder> {
         holder.orderItemLabel.setText(cartItem.getProduct().getLabel());
         holder.orderItemQuantity.setText("Quantity : " + cartItem.getQuantity());
         holder.orderItemTotal.setText("$" + cartItem.getQuantity() * cartItem.getProduct().getPrice());
-        holder.removeCartItemButton.setOnClickListener(v -> {
-            removeCartItem(cartItem, position);
-        });
+        if (UserService.getInstance().getUser().getRole().equals("ADMIN"))
+            holder.removeCartItemButton.setVisibility(View.GONE);
+        else
+            holder.removeCartItemButton.setOnClickListener(v -> {
+                removeCartItem(cartItem, position);
+            });
         holder.relativeLayout.setOnClickListener(v -> showProduct(cartItem.getProduct()));
     }
 

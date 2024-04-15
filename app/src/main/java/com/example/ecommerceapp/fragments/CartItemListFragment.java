@@ -89,11 +89,14 @@ public class CartItemListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         cartItemAdapter = new CartItemAdapter(getContext(), noCartItems, this, cartItems);
         recyclerView.setAdapter(cartItemAdapter);
+        if (UserService.getInstance().getUser().getRole().equals("ADMIN"))
+            checkoutButton.setVisibility(View.GONE);
         if (this.cartItems.isEmpty()) {
             noCartItems.setVisibility(View.VISIBLE);
             disableCheckout();
         } else
             checkoutButton.setOnClickListener(v -> checkout());
+
         return view;
     }
 

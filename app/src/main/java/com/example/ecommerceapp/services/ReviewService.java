@@ -38,5 +38,13 @@ public class ReviewService {
         }
     }
 
+    public void deleteByUserUsernameAndProductLabel(String username, String label) {
+        try {
+            reviewController.deleteByUserUsernameAndProductLabel(username, label).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

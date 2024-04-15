@@ -2,6 +2,7 @@ package com.example.ecommerceapp.services;
 
 import com.example.ecommerceapp.controllers.ProductController;
 import com.example.ecommerceapp.models.Product;
+import com.example.ecommerceapp.models.Response;
 import com.example.ecommerceapp.retrofit.RetrofitService;
 
 import java.io.IOException;
@@ -39,6 +40,38 @@ public class ProductService {
             mostReviewedProducts.sort((p1, p2) -> Integer.compare(p2.getNumberOfOrders(), p1.getNumberOfOrders()));
             mostReviewedProducts = mostReviewedProducts.subList(0, Math.min(mostReviewedProducts.size(), 2));
             return products;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Product update(Product product) {
+        try {
+            return productController.update(product).execute().body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Product findById(Long id) {
+        try {
+            return productController.findById(id).execute().body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Product save(Product product) {
+        try {
+            return productController.save(product).execute().body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Response deleteByLabel(String label) {
+        try {
+            return productController.deleteByLabel(label).execute().body();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -35,7 +35,7 @@ public interface UserController {
     public Call<Void> removeFromWishList(@Path("username") String username, @Path("label") String label);
 
     @DELETE("/api/user/{username}")
-    public Call<Integer> deleteByUsername(@Path("username") String username);
+    public Call<Void> deleteByUsername(@Path("username") String username);
 
     @POST("/api/user/")
     public Call<User> register(@Body User user);

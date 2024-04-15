@@ -16,6 +16,9 @@ import com.example.ecommerceapp.models.User;
 import com.example.ecommerceapp.services.LoginManager;
 import com.example.ecommerceapp.services.UserService;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import io.github.muddz.styleabletoast.StyleableToast;
 
 public class AccountFragment extends Fragment {
@@ -56,20 +59,33 @@ public class AccountFragment extends Fragment {
         passwordButton.setOnClickListener(v -> mainActivity.replaceFragment(new PasswordFragment(), "Password", true));
     }
 
+    private boolean validateEmail(String email) {
+        String EMAIL_PATTERN =
+                "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
+                        "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
     private void update() {
         String usernameString = username.getText().toString();
-        String emailStringString = email.getText().toString();
+        String emailString = email.getText().toString();
         String firstNameString = firstName.getText().toString();
         String lastNameString = lastName.getText().toString();
-        if (usernameString.isEmpty() || emailStringString.isEmpty() || firstNameString.isEmpty() || lastNameString.isEmpty())
+        if (usernameString.isEmpty() || emailString.isEmpty() || firstNameString.isEmpty() || lastNameString.isEmpty())
             StyleableToast.makeText(mainActivity, "All fields are required", R.style.Failure).show();
+        else if (!validateEmail(emailString))
+            StyleableToast.makeText(mainActivity, "Please enter a valid email address", R.style.Failure).show();
         else {
             User user = UserService.getInstance().getUser();
 
             String oldUsername = user.getUsername();
 
             user.setUsername(usernameString);
-            user.setEmail(emailStringString);
+            user.setEmail(emailString);
             user.setFirstName(firstNameString);
             user.setLastName(lastNameString);
             Thread thread = new Thread(() -> {
@@ -91,8 +107,9 @@ public class AccountFragment extends Fragment {
         LoginManager.removeCredentials(mainActivity);
         UserService.getInstance().setUser(null);
         mainActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        mainActivity.replaceFragment(new HomeFragment(), "Home", false);
-        mainActivity.getBottomNavigationView().getMenu().findItem(R.id.home).setChecked(true);
+        mainActivity.replaceFragment(new HomeFragment(), "Home", true);
+        mainActivity.invalidateOptionsMenu();
+        mainActivity.initBottomNav();
         StyleableToast.makeText(mainActivity, "Logged out", R.style.Success).show();
     }
 

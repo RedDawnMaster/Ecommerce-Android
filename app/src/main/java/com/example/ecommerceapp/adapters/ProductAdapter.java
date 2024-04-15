@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerceapp.R;
 import com.example.ecommerceapp.activities.MainActivity;
+import com.example.ecommerceapp.fragments.AdminProductFragment;
 import com.example.ecommerceapp.fragments.ProductFragment;
 import com.example.ecommerceapp.models.Product;
 import com.example.ecommerceapp.models.Review;
 import com.example.ecommerceapp.services.ReviewService;
+import com.example.ecommerceapp.services.UserService;
 
 import java.util.List;
 
@@ -30,7 +32,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
         MainActivity mainActivity = (MainActivity) context;
         Thread thread = new Thread(() -> {
             List<Review> reviews = ReviewService.getInstance().findByProductLabel(product.getLabel());
-            mainActivity.runOnUiThread(() -> mainActivity.replaceFragment(new ProductFragment(product, reviews, ProductAdapter.this), "Product", true));
+            mainActivity.runOnUiThread(() -> {
+                if (UserService.getInstance().getUser() != null && UserService.getInstance().getUser().getRole().equals("ADMIN"))
+                    mainActivity.replaceFragment(new AdminProductFragment(product, reviews, this), "AdminProduct", true);
+                else
+                    mainActivity.replaceFragment(new ProductFragment(product, reviews, ProductAdapter.this), "Product", true);
+            });
         });
         thread.start();
     }

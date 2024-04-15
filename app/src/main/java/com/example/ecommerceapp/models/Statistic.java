@@ -2,10 +2,11 @@ package com.example.ecommerceapp.models;
 
 public class Statistic {
     private Long id;
-    private double totalProducts;
-    private double totalSoldProducts;
+    private int totalProducts;
+    private int totalSoldProducts;
     private double totalSales;
-    private double totalClients;
+    private int totalClients;
+
     private int refundPeriod = 5;
     private int deliveryTime = 2;
 
@@ -17,19 +18,19 @@ public class Statistic {
         this.id = id;
     }
 
-    public double getTotalProducts() {
+    public int getTotalProducts() {
         return totalProducts;
     }
 
-    public void setTotalProducts(double totalProducts) {
+    public void setTotalProducts(int totalProducts) {
         this.totalProducts = totalProducts;
     }
 
-    public double getTotalSoldProducts() {
+    public int getTotalSoldProducts() {
         return totalSoldProducts;
     }
 
-    public void setTotalSoldProducts(double totalSoldProducts) {
+    public void setTotalSoldProducts(int totalSoldProducts) {
         this.totalSoldProducts = totalSoldProducts;
     }
 
@@ -41,11 +42,11 @@ public class Statistic {
         this.totalSales = totalSales;
     }
 
-    public double getTotalClients() {
+    public int getTotalClients() {
         return totalClients;
     }
 
-    public void setTotalClients(double totalClients) {
+    public void setTotalClients(int totalClients) {
         this.totalClients = totalClients;
     }
 

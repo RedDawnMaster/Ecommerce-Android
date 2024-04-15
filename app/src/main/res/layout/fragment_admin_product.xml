@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.AdminProductFragment"
+    android:background="@color/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/product_image_admin"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_description" />
+
+
+        <Button
+            android:id="@+id/upload_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/upload_image"
+            android:layout_below="@id/product_image_admin"
+            android:background="@drawable/shape_button"
+            app:backgroundTint="@color/primary"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp" />
+
+        <RatingBar
+            android:id="@+id/product_ratingBar_admin"
+            style="@android:style/Widget.Material.Light.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/upload_image"
+            android:layout_marginTop="30dp"
+            android:background="@color/ratingBg"
+            android:layout_centerHorizontal="true"
+            android:numStars="5"
+            android:progressTint="#FFD600"
+            android:rating="0" />
+
+        <TextView
+            android:id="@+id/product_evaluation_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/product_rating_admin"
+            android:textSize="17sp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/product_ratingBar_admin" />
+
+        <TextView
+            android:id="@+id/product_label_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_evaluation_admin"
+            android:layout_marginTop="20dp"
+            android:text="@string/label"
+            android:layout_alignStart="@id/product_label_value_admin"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/primary"
+            android:labelFor="@id/product_label_value_admin" />
+
+        <EditText
+            android:id="@+id/product_label_value_admin"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/product_label_admin"
+            android:layout_marginTop="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="5dp"
+            android:textColor="@color/black"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:background="@drawable/shape_account_input"
+            android:textColorHint="@color/primary"
+            android:autofillHints="Product label"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/product_description_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_label_value_admin"
+            android:layout_marginTop="20dp"
+            android:text="@string/description"
+            android:layout_alignStart="@id/product_label_value_admin"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/primary"
+            android:labelFor="@id/product_description_value_admin" />
+
+        <EditText
+            android:id="@+id/product_description_value_admin"
+            android:layout_width="350dp"
+            android:layout_height="150dp"
+            android:layout_below="@id/product_description_admin"
+            android:layout_marginTop="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="5dp"
+            android:textColor="@color/black"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"
+            android:background="@drawable/shape_account_input"
+            android:textColorHint="@color/primary"
+            android:autofillHints="Product description"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine" />
+
+        <TextView
+            android:id="@+id/product_category_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_description_value_admin"
+            android:layout_marginTop="20dp"
+            android:text="@string/category"
+            android:layout_alignStart="@id/product_label_value_admin"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/primary"
+            android:labelFor="@id/product_category_value_admin" />
+
+        <EditText
+            android:id="@+id/product_category_value_admin"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/product_category_admin"
+            android:layout_marginTop="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="5dp"
+            android:textColor="@color/black"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:background="@drawable/shape_account_input"
+            android:textColorHint="@color/primary"
+            android:autofillHints="Product category"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/product_price_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_category_value_admin"
+            android:layout_marginTop="20dp"
+            android:text="@string/product_price"
+            android:layout_alignStart="@id/product_label_value_admin"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/primary"
+            android:labelFor="@id/product_price_value_admin" />
+
+        <EditText
+            android:id="@+id/product_price_value_admin"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/product_price_admin"
+            android:layout_marginTop="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="5dp"
+            android:textColor="@color/money_green"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:background="@drawable/shape_account_input"
+            android:textColorHint="@color/primary"
+            android:autofillHints="Product price"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:id="@+id/product_stock_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_price_value_admin"
+            android:layout_marginTop="20dp"
+            android:text="@string/stock"
+            android:layout_alignStart="@id/product_label_value_admin"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/primary"
+            android:labelFor="@id/product_stock_value_admin" />
+
+        <EditText
+            android:id="@+id/product_stock_value_admin"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/product_stock_admin"
+            android:layout_marginTop="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="5dp"
+            android:textColor="@color/black"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:background="@drawable/shape_account_input"
+            android:textColorHint="@color/primary"
+            android:autofillHints="Product stock"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/product_orders_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_stock_value_admin"
+            android:layout_marginTop="20dp"
+            android:text="@string/orders"
+            android:layout_alignStart="@id/product_label_value_admin"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/primary"
+            android:labelFor="@id/product_orders_value_admin" />
+
+        <TextView
+            android:id="@+id/product_orders_value_admin"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/product_orders_admin"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"
+            android:text="0"
+            android:background="@drawable/shape_account_input" />
+
+        <TextView
+            android:id="@+id/product_reviews_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_orders_value_admin"
+            android:layout_marginTop="20dp"
+            android:text="@string/reviews"
+            android:layout_alignStart="@id/product_label_value_admin"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/primary"
+            android:labelFor="@id/reviews_recycler_admin" />
+
+        <TextView
+            android:id="@+id/no_reviews_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_reviews_admin"
+            android:layout_centerHorizontal="true"
+            android:text="@string/no_reviews_yet"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:layout_marginTop="10dp"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reviews_recycler_admin"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_below="@id/no_reviews_admin" />
+
+        <Button
+            android:id="@+id/save_product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/reviews_recycler_admin"
+            android:background="@drawable/shape_button"
+            android:layout_marginTop="13dp"
+            android:layout_alignStart="@id/product_label_value_admin"
+            android:layout_alignEnd="@id/product_label_value_admin"
+            android:minHeight="48dp"
+            android:layout_marginBottom="20dp"
+            app:backgroundTint="@color/green"
+            android:text="@string/save" />
+
+
+    </RelativeLayout>
+
+
+</ScrollView>

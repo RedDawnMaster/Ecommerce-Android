@@ -4,15 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.PasswordFragment"
+    tools:context=".fragments.CategoryFragment"
     android:background="@color/background">
 
-
     <TextView
-        android:id="@+id/change_password_title"
+        android:id="@+id/add_category_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/change_password"
+        android:text="@string/add_category"
         android:textSize="25sp"
         android:textColor="@color/primary"
         android:layout_centerHorizontal="true"
@@ -20,51 +19,32 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/old_password"
+        android:id="@+id/category_label"
         android:layout_width="325dp"
         android:layout_height="48dp"
-        android:layout_below="@id/change_password_title"
+        android:layout_below="@id/add_category_title"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
         android:paddingStart="10dp"
         android:paddingEnd="5dp"
         android:background="@drawable/shape_account_input"
-        android:drawableEnd="@drawable/ic_lock"
-        android:inputType="textPassword"
-        android:autofillHints="Old Password"
-        android:hint="@string/old_password"
-        android:textColorHint="@color/primary"
-        android:textColor="@color/black" />
-
-    <EditText
-        android:id="@+id/new_password"
-        android:layout_width="325dp"
-        android:layout_height="48dp"
-        android:layout_below="@id/old_password"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
-        android:paddingStart="10dp"
-        android:paddingEnd="5dp"
-        android:background="@drawable/shape_account_input"
-        android:drawableEnd="@drawable/ic_lock"
-        android:inputType="textPassword"
-        android:autofillHints="New Password"
-        android:hint="@string/new_password"
+        android:inputType="text"
+        android:autofillHints="Category Label"
+        android:hint="@string/category_label"
         android:textColorHint="@color/primary"
         android:textColor="@color/black" />
 
     <Button
-        android:id="@+id/confirm_password"
+        android:id="@+id/save_category_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/new_password"
-        android:layout_alignStart="@id/new_password"
-        android:layout_alignEnd="@id/new_password"
+        android:layout_below="@id/category_label"
+        android:layout_alignStart="@id/category_label"
+        android:layout_alignEnd="@id/category_label"
         android:layout_marginTop="40dp"
         android:background="@drawable/shape_button"
         android:minHeight="48dp"
         app:backgroundTint="@color/primary"
-        android:text="@string/confirm" />
-
+        android:text="@string/save" />
 
 </RelativeLayout>

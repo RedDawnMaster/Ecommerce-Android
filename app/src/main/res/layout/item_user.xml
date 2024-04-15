@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_listing"
+    android:layout_margin="2dp">
+
+    <TextView
+        android:id="@+id/user_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/username"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/user_fullname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/user_username"
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:text="@string/full_name" />
+
+    <TextView
+        android:id="@+id/user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:layout_below="@id/user_fullname"
+        android:layout_alignStart="@id/user_username"
+        android:text="@string/email_email" />
+
+    <TextView
+        android:id="@+id/user_birthdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:layout_below="@id/user_email"
+        android:layout_alignStart="@id/user_username"
+        android:text="@string/birth_date_01_04_2000" />
+
+    <TextView
+        android:id="@+id/user_creation_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:layout_below="@id/user_birthdate"
+        android:layout_alignStart="@id/user_username"
+        android:text="@string/registration_date_01_05_2020" />
+
+    <TextView
+        android:id="@+id/user_total_bought"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textSize="17sp"
+        android:textColor="@color/money_green"
+        android:layout_alignEnd="@id/user_fullname"
+        android:layout_alignBottom="@id/user_creation_date"
+        android:text="@string/spent_4500" />
+
+    <Button
+        android:id="@+id/user_orders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_total_bought"
+        android:layout_alignEnd="@id/user_total_bought"
+        android:background="@drawable/shape_button"
+        app:backgroundTint="@color/green"
+        android:text="@string/orders"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
+
+    <Button
+        android:id="@+id/user_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/user_orders"
+        android:layout_marginEnd="10dp"
+        android:layout_alignBottom="@id/user_orders"
+        android:background="@drawable/shape_button"
+        app:backgroundTint="@color/blue"
+        android:text="@string/cart" />
+
+    <ImageButton
+        android:id="@+id/delete_user_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@id/user_orders"
+        android:layout_alignStart="@id/user_username"
+        android:background="@drawable/shape_button"
+        android:contentDescription="@string/delete_user"
+        android:backgroundTint="@color/red"
+        android:src="@drawable/ic_delete" />
+
+</RelativeLayout>

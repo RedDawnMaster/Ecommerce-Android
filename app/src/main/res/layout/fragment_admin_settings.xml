@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.AdminSettingsFragment"
+    android:background="@color/background">
+
+    <TextView
+        android:id="@+id/admin_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/admin_settings"
+        android:textAllCaps="false"
+        android:textColor="@color/primary"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/statistics_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/admin_settings"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/statistics"
+        android:textColor="@color/primary"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/line_break_statistic"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="11dp"
+        android:background="@color/primary"
+        android:layout_toEndOf="@id/statistics_title"
+        android:layout_alignTop="@id/statistics_title"
+        android:layout_alignBottom="@id/statistics_title" />
+
+    <TextView
+        android:id="@+id/total_products_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/statistics_title"
+        android:layout_marginTop="20dp"
+        android:text="@string/total_products"
+        android:layout_alignStart="@id/statistics_title"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/primary"
+        android:labelFor="@id/total_products_value" />
+
+    <TextView
+        android:id="@+id/total_products_value"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/total_products_label"
+        android:layout_alignStart="@id/total_products_label"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:background="@drawable/shape_account_input"
+        android:textColorHint="@color/primary" />
+
+    <TextView
+        android:id="@+id/total_sold_products_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/statistics_title"
+        android:layout_marginTop="20dp"
+        android:text="@string/total_sold_products"
+        android:layout_alignStart="@id/total_sold_products_value"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/primary"
+        android:labelFor="@id/total_sold_products_value" />
+
+    <TextView
+        android:id="@+id/total_sold_products_value"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/total_products_label"
+        android:layout_alignEnd="@id/line_break_statistic"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:background="@drawable/shape_account_input"
+        android:textColorHint="@color/primary" />
+
+    <TextView
+        android:id="@+id/total_clients"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/total_products_value"
+        android:layout_marginTop="20dp"
+        android:text="@string/total_clients"
+        android:layout_alignStart="@id/statistics_title"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/primary"
+        android:labelFor="@id/total_clients_value" />
+
+    <TextView
+        android:id="@+id/total_clients_value"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/total_clients"
+        android:layout_alignStart="@id/total_clients"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:background="@drawable/shape_account_input"
+        android:textColorHint="@color/primary" />
+
+    <TextView
+        android:id="@+id/revenue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/total_sold_products_value"
+        android:layout_marginTop="20dp"
+        android:text="@string/revenue"
+        android:layout_alignStart="@id/total_sold_products_value"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/primary"
+        android:labelFor="@id/revenue_value" />
+
+    <TextView
+        android:id="@+id/revenue_value"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/revenue"
+        android:layout_alignEnd="@id/line_break_statistic"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/money_green"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:background="@drawable/shape_account_input"
+        android:textColorHint="@color/primary" />
+
+    <TextView
+        android:id="@+id/parameters_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/total_clients_value"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/parameters"
+        android:textColor="@color/primary"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/line_break_parameters"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="11dp"
+        android:background="@color/primary"
+        android:layout_toEndOf="@id/parameters_title"
+        android:layout_alignTop="@id/parameters_title"
+        android:layout_alignBottom="@id/parameters_title" />
+
+    <TextView
+        android:id="@+id/delivery_days_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/parameters_title"
+        android:layout_marginTop="20dp"
+        android:text="@string/delivery_days"
+        android:layout_alignStart="@id/parameters_title"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/primary"
+        android:labelFor="@id/delivery_days_value" />
+
+    <EditText
+        android:id="@+id/delivery_days_value"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/delivery_days_label"
+        android:layout_alignStart="@id/delivery_days_label"
+        android:layout_marginTop="5dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="5dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:background="@drawable/shape_account_input"
+        android:textColorHint="@color/primary"
+        android:autofillHints="Delivery days"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/refund_days_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/parameters_title"
+        android:layout_marginTop="20dp"
+        android:text="@string/refund_days"
+        android:layout_alignStart="@id/refund_days_value"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/primary"
+        android:labelFor="@id/refund_days_value" />
+
+    <EditText
+        android:id="@+id/refund_days_value"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/refund_days_label"
+        android:layout_alignEnd="@id/line_break_parameters"
+        android:layout_marginTop="5dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="5dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:background="@drawable/shape_account_input"
+        android:textColorHint="@color/primary"
+        android:autofillHints="Refund days"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/update_button_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/delivery_days_value"
+        android:layout_alignStart="@id/delivery_days_value"
+        android:layout_alignEnd="@id/refund_days_value"
+        android:text="@string/update"
+        android:background="@drawable/shape_button"
+        app:backgroundTint="@color/primary"
+        android:minHeight="48dp"
+        android:layout_marginTop="30dp" />
+
+    <Button
+        android:id="@+id/logout_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/update_button_admin"
+        android:layout_alignStart="@id/delivery_days_value"
+        android:layout_alignEnd="@id/refund_days_value"
+        android:text="@string/log_out"
+        android:background="@drawable/shape_button"
+        app:backgroundTint="@color/logout"
+        android:minHeight="48dp"
+        android:layout_marginTop="20dp" />
+
+</RelativeLayout>

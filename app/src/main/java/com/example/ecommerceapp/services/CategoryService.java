@@ -33,6 +33,15 @@ public class CategoryService {
         }
     }
 
+    public Category save(Category category) {
+        try {
+            return categoryController.save(category).execute().body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public List<Category> getCategories() {
         return categories;
     }

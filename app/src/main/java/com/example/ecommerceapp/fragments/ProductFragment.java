@@ -42,6 +42,7 @@ public class ProductFragment extends Fragment {
 
     private Product product;
     private ProductAdapter productAdapter;
+    private TextView noReviews;
     private List<Review> reviews;
 
     private ImageView productImage;
@@ -91,6 +92,7 @@ public class ProductFragment extends Fragment {
         writeReview = view.findViewById(R.id.write_review);
         rateProduct = view.findViewById(R.id.rate_review);
         postReviewButton = view.findViewById(R.id.post_review);
+        noReviews = view.findViewById(R.id.no_reviews);
         mainActivity = (MainActivity) getContext();
     }
 
@@ -107,9 +109,22 @@ public class ProductFragment extends Fragment {
                 Cart cart = CartService.getInstance().getCart();
                 String quantityString = productQuantity.getText().toString();
                 int quantity;
-                if (!quantityString.isEmpty())
-                    quantity = Integer.parseInt(quantityString);
-                else quantity = 1;
+                if (!quantityString.isEmpty()) {
+                    try {
+                        int parsedQuantity = Integer.parseInt(quantityString);
+                        if (parsedQuantity > 0) {
+                            quantity = parsedQuantity;
+                        } else {
+                            throw new NumberFormatException();
+                        }
+                    } catch (NumberFormatException e) {
+                        mainActivity.runOnUiThread(() -> StyleableToast.makeText(mainActivity, "Please enter a valid quantity", R.style.Failure).show());
+                        return;
+                    }
+                } else {
+                    mainActivity.runOnUiThread(() -> StyleableToast.makeText(mainActivity, "Please enter a valid quantity", R.style.Failure).show());
+                    return;
+                }
                 CartItem foundCartItem = findInCart(cart, product.getLabel());
                 if (foundCartItem != null) {
                     int finalQuantity = foundCartItem.getQuantity() + quantity;
@@ -146,11 +161,12 @@ public class ProductFragment extends Fragment {
                 review = ReviewService.getInstance().save(review);
                 if (review != null) {
                     Review finalReview = review;
+                    reviewAdapter.getReviews().add(finalReview);
                     mainActivity.runOnUiThread(() -> {
-                        reviewAdapter.getReviews().add(finalReview);
                         reviewAdapter.notifyDataSetChanged();
                         writeReview.setText("");
                         rateProduct.setRating(0);
+                        noReviews.setVisibility(View.GONE);
                         StyleableToast.makeText(mainActivity, "Review posted", R.style.Success).show();
                     });
                     ProductService.getInstance().getProducts().stream().filter(pro -> pro.getId() == this.product.getId()).forEach(pro -> {
@@ -161,14 +177,15 @@ public class ProductFragment extends Fragment {
                         }
                         sum /= pro.getEvaluationCount();
                         pro.setStars(sum);
-                        product.setEvaluationCount(pro.getEvaluationCount());
-                        product.setStars(sum);
+                        float finalSum = sum;
+                        mainActivity.runOnUiThread(() -> {
+                            productRating.setRating(finalSum);
+                            productEvaluation.setText("(" + pro.getEvaluationCount() + ")");
+                            if (productAdapter != null) productAdapter.notifyDataSetChanged();
+                            productRating.setRating(finalSum);
+                        });
                     });
-                    mainActivity.runOnUiThread(() -> {
-                        productRating.setRating((float) product.getStars());
-                        productEvaluation.setText("(" + product.getEvaluationCount() + ")");
-                        if (productAdapter != null) productAdapter.notifyDataSetChanged();
-                    });
+
                 } else {
                     mainActivity.runOnUiThread(() -> {
                         writeReview.setText("");
@@ -209,12 +226,13 @@ public class ProductFragment extends Fragment {
         bindData();
         recyclerView = view.findViewById(R.id.reviews_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        reviewAdapter = new ReviewAdapter(this.reviews);
+        reviewAdapter = new ReviewAdapter(getContext(), null, null, null, null, null, this.reviews);
         recyclerView.setAdapter(reviewAdapter);
         if (this.reviews.isEmpty()) {
             ViewGroup.LayoutParams layoutParams = recyclerView.getLayoutParams();
             layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             recyclerView.setLayoutParams(layoutParams);
+            noReviews.setVisibility(View.VISIBLE);
         }
         return view;
     }

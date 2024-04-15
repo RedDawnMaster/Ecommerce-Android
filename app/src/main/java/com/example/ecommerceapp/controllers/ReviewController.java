@@ -21,7 +21,7 @@ public interface ReviewController {
     public Call<List<Review>> findByProductLabel(@Path("label") String label);
 
     @DELETE("/api/review/{username}/{label}")
-    public Call<Integer> deleteByUserUsernameAndProductLabel(@Path("username") String username, @Path("label") String label);
+    public Call<Void> deleteByUserUsernameAndProductLabel(@Path("username") String username, @Path("label") String label);
 
     @POST("/api/review/")
     public Call<Review> save(@Body Review review);

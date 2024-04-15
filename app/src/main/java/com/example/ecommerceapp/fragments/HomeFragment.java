@@ -197,4 +197,12 @@ public class HomeFragment extends Fragment {
         bindData();
         return view;
     }
+
+    public TextView getDeliveryDays() {
+        return deliveryDays;
+    }
+
+    public TextView getRefundDays() {
+        return refundDays;
+    }
 }

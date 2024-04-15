@@ -56,7 +56,7 @@ public class LoginFragment extends Fragment {
                     authenticationActivity.runOnUiThread(() -> StyleableToast.makeText(authenticationActivity, "Username or Password is incorrect", R.style.Failure).show());
                 else {
                     LoginManager.saveCredentials(authenticationActivity, user.getUsername(), user.getPassword());
-                    authenticationActivity.setResultCodeAndFinish(Activity.RESULT_OK);
+                    authenticationActivity.setResultCodeAndFinish(Activity.RESULT_OK, 0);
                 }
             });
             thread.start();

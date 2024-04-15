@@ -48,7 +48,8 @@
             android:drawableEnd="@drawable/ic_account_circle"
             android:inputType="text"
             android:autofillHints="username"
-            android:textColorHint="@color/primary" />
+            android:textColorHint="@color/primary"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/email_field"
@@ -76,7 +77,8 @@
             android:drawableEnd="@drawable/ic_email"
             android:inputType="textEmailAddress"
             android:autofillHints="name"
-            android:textColorHint="@color/primary" />
+            android:textColorHint="@color/primary"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/firstname_field"
@@ -103,7 +105,8 @@
             android:background="@drawable/shape_account_input"
             android:inputType="text"
             android:autofillHints="name"
-            android:textColorHint="@color/primary" />
+            android:textColorHint="@color/primary"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/lastname_field"
@@ -130,7 +133,8 @@
             android:background="@drawable/shape_account_input"
             android:inputType="text"
             android:autofillHints="name"
-            android:textColorHint="@color/primary" />
+            android:textColorHint="@color/primary"
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/update_button"

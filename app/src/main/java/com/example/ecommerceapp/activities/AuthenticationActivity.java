@@ -1,6 +1,7 @@
 package com.example.ecommerceapp.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -21,8 +22,12 @@ public class AuthenticationActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    public void setResultCodeAndFinish(int resultCode) {
-        setResult(resultCode);
+    public void setResultCodeAndFinish(int resultCode, int type) {
+        if (type != 2) {
+            Intent intent = new Intent();
+            intent.putExtra("type", type);
+            setResult(resultCode, intent);
+        } else setResult(resultCode);
         finish();
     }
 
@@ -34,7 +39,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                setResultCodeAndFinish(Activity.RESULT_CANCELED);
+                setResultCodeAndFinish(Activity.RESULT_CANCELED, 2);
             }
         };
         getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);

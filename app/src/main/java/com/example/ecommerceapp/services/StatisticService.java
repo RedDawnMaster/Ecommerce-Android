@@ -30,6 +30,14 @@ public class StatisticService {
         }
     }
 
+    public void save() {
+        try {
+            statistic = statisticController.save(statistic).execute().body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Statistic getStatistic() {
         return statistic;
     }

@@ -20,6 +20,9 @@ import com.example.ecommerceapp.services.UserService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
@@ -55,22 +58,46 @@ public class RegisterFragment extends Fragment {
         loginText.setOnClickListener(v -> authenticationActivity.replaceFragment(new LoginFragment()));
     }
 
+    private boolean validateEmail(String email) {
+        String EMAIL_PATTERN =
+                "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
+                        "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    private boolean validateDate(String input, SimpleDateFormat dateFormat) {
+        try {
+            dateFormat.setLenient(false);
+            Date date = dateFormat.parse(input);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
 
     private void register() {
         String usernameString = username.getText().toString();
-        String emailStringString = email.getText().toString();
+        String emailString = email.getText().toString();
         String firstNameString = firstName.getText().toString();
         String lastNameString = lastName.getText().toString();
         String birthDateString = birthDate.getText().toString();
         String passwordString = password.getText().toString();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        if (usernameString.isEmpty() || emailStringString.isEmpty() || firstNameString.isEmpty() || lastNameString.isEmpty() || birthDateString.isEmpty() || passwordString.isEmpty())
+        if (usernameString.isEmpty() || emailString.isEmpty() || firstNameString.isEmpty() || lastNameString.isEmpty() || birthDateString.isEmpty() || passwordString.isEmpty())
             StyleableToast.makeText(authenticationActivity, "All fields are required", R.style.Failure).show();
+        else if (!validateEmail(emailString))
+            StyleableToast.makeText(authenticationActivity, "Please enter a valid email address", R.style.Failure).show();
+        else if (!validateDate(birthDateString, dateFormat))
+            StyleableToast.makeText(authenticationActivity, "Date should be in this format : dd/MM/yyyy", R.style.Failure).show();
         else {
             Thread thread = new Thread(() -> {
                 User user;
                 try {
-                    user = new User(usernameString, firstNameString, lastNameString, emailStringString, passwordString, dateFormat.parse(birthDateString));
+                    user = new User(usernameString, firstNameString, lastNameString, emailString, passwordString, dateFormat.parse(birthDateString));
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
@@ -79,7 +106,7 @@ public class RegisterFragment extends Fragment {
                     authenticationActivity.runOnUiThread(() -> StyleableToast.makeText(authenticationActivity, "Username or email already exists", R.style.Failure).show());
                 else {
                     LoginManager.saveCredentials(authenticationActivity, user.getUsername(), user.getPassword());
-                    authenticationActivity.setResultCodeAndFinish(Activity.RESULT_OK);
+                    authenticationActivity.setResultCodeAndFinish(Activity.RESULT_OK, 1);
                 }
             });
             thread.start();

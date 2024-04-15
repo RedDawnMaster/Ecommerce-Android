@@ -12,5 +12,5 @@ public interface StatisticController {
     public Call<Statistic> findById();
 
     @POST("/api/statistic/")
-    public Call<Void> save(@Body Statistic statistic);
+    public Call<Statistic> save(@Body Statistic statistic);
 }

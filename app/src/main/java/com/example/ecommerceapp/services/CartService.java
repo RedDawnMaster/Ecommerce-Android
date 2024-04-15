@@ -23,9 +23,9 @@ public class CartService {
         return cartService;
     }
 
-    public void findByUserUsername(String username) {
+    public Cart findByUserUsername(String username) {
         try {
-            cart = cartController.findByUserUsername(username).execute().body();
+            return cart = cartController.findByUserUsername(username).execute().body();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
