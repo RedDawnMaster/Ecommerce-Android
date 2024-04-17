@@ -18,7 +18,7 @@
             android:adjustViewBounds="true"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/content_description"
-            app:srcCompat="@drawable/ss" />
+            app:srcCompat="@drawable/error_loading_image" />
 
         <TextView
             android:id="@+id/product_label"

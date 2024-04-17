@@ -1,12 +1,16 @@
 package com.example.ecommerceapp.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -19,9 +23,14 @@ import com.example.ecommerceapp.models.Statistic;
 import com.example.ecommerceapp.services.ProductService;
 import com.example.ecommerceapp.services.ReviewService;
 import com.example.ecommerceapp.services.StatisticService;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class HomeFragment extends Fragment {
 
@@ -68,11 +77,17 @@ public class HomeFragment extends Fragment {
     private List<TextView> mostReviewedLabels = new ArrayList<>();
     private List<TextView> mostReviewedPrices = new ArrayList<>();
 
+    private int count;
+    private RelativeLayout homelayout;
+    private int bestSellerSize;
+    private int mostReviewsSize;
+
     public HomeFragment() {
         // Required empty public constructor
     }
 
     private void initComponents(View view) {
+        homelayout = view.findViewById(R.id.home_layout);
         deliveryDays = view.findViewById(R.id.delivery_days);
         refundDays = view.findViewById(R.id.refund_days);
 
@@ -149,7 +164,7 @@ public class HomeFragment extends Fragment {
         int i;
         for (i = 0; i < bestSellerProducts.size(); i++) {
             Product product = bestSellerProducts.get(i);
-            bestSellerImages.get(i).setImageResource(R.drawable.avatar_1);
+            bestSellerImages.get(i).setImageResource(R.drawable.error_loading_image);
             bestSellerLabels.get(i).setText(product.getLabel());
             bestSellerPrices.get(i).setText("$" + product.getPrice());
             bestSellers.get(i).setOnClickListener(v -> {
@@ -163,7 +178,7 @@ public class HomeFragment extends Fragment {
 
         for (i = 0; i < mostReviewedProducts.size(); i++) {
             Product product = mostReviewedProducts.get(i);
-            mostReviewedImages.get(i).setImageResource(R.drawable.avatar_1);
+            mostReviewedImages.get(i).setImageResource(R.drawable.error_loading_image);
             mostReviewedLabels.get(i).setText(product.getLabel());
             mostReviewedPrices.get(i).setText("$" + product.getPrice());
             mostReviews.get(i).setOnClickListener(v -> showProduct(product));
@@ -175,6 +190,88 @@ public class HomeFragment extends Fragment {
 
     }
 
+    private List<Product> mergeProducts() {
+        List<Product> products = new ArrayList<>(ProductService.getInstance().getBestSellerProducts());
+        bestSellerSize = ProductService.getInstance().getBestSellerProducts().size();
+        products.addAll(ProductService.getInstance().getMostReviewedProducts());
+        mostReviewsSize = ProductService.getInstance().getMostReviewedProducts().size();
+        return products;
+    }
+
+
+    private void downloadImagesFirebase() {
+        count = 0;
+        MainActivity mainActivity = (MainActivity) getContext();
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Loading products...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        List<Product> products = mergeProducts();
+        Map<String, File> localFiles = ProductService.getInstance().getLocalFiles();
+        if (products.isEmpty() && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+            homelayout.setVisibility(View.VISIBLE);
+        } else {
+            for (int i = 0; i < products.size(); i++) {
+                Product product = products.get(i);
+                if (localFiles.get(product.getLabel()) != null && localFiles.get(product.getLabel()).length() != 0) {
+                    File localFile = ProductService.getInstance().getLocalFiles().get(product.getLabel());
+                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    if (i < bestSellerSize) {
+                        bestSellerImages.get(i).setImageBitmap(bitmap);
+                    } else if ((i - bestSellerSize) < mostReviewsSize)
+                        mostReviewedImages.get(i - bestSellerSize).setImageBitmap(bitmap);
+                    count++;
+                    if (count == products.size() && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                        homelayout.setVisibility(View.VISIBLE);
+                    }
+                    continue;
+                }
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference("images/" + product.getLabel());
+                try {
+                    File localFile = File.createTempFile(product.getLabel(), ".jpeg");
+                    int finalI = i;
+                    storageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                        ProductService.getInstance().getLocalFiles().put(product.getLabel(), localFile);
+                        count++;
+                        localFiles.put(product.getLabel(), localFile);
+                        Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                        if (finalI < bestSellerSize) {
+                            bestSellerImages.get(finalI).setImageBitmap(bitmap);
+                        } else if ((finalI - bestSellerSize) < mostReviewsSize)
+                            mostReviewedImages.get(finalI - bestSellerSize).setImageBitmap(bitmap);
+                        if (count == products.size() && progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                            homelayout.setVisibility(View.VISIBLE);
+                        }
+                        Fragment fragmentCategory = mainActivity.getSupportFragmentManager().findFragmentByTag(product.getCategory().getLabel());
+                        if (fragmentCategory != null) {
+                            ((ProductListFragment) fragmentCategory).getProductAdapter().notifyDataSetChanged();
+                        }
+                        Fragment fragmentOrderItems = mainActivity.getSupportFragmentManager().findFragmentByTag("OrderItems");
+                        if (fragmentOrderItems != null) {
+                            ((OrderItemListFragment) fragmentOrderItems).getOrderItemAdapter().notifyDataSetChanged();
+                        }
+                        Fragment fragmentCart = mainActivity.getSupportFragmentManager().findFragmentByTag("Cart");
+                        if (fragmentCart != null) {
+                            ((CartItemListFragment) fragmentCart).getCartItemAdapter().notifyDataSetChanged();
+                        }
+                    }).addOnFailureListener(e -> {
+                        count++;
+                        if (count == products.size() && progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                            homelayout.setVisibility(View.VISIBLE);
+                        }
+                    });
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+
     private void showProduct(Product product) {
         MainActivity mainActivity = (MainActivity) getContext();
         Thread thread = new Thread(() -> {
@@ -183,6 +280,7 @@ public class HomeFragment extends Fragment {
         });
         thread.start();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -194,7 +292,10 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initComponents(view);
+        homelayout.setVisibility(View.GONE);
         bindData();
+        if (!ProductService.getInstance().getProducts().isEmpty())
+            downloadImagesFirebase();
         return view;
     }
 

@@ -5,9 +5,13 @@ import com.example.ecommerceapp.models.Product;
 import com.example.ecommerceapp.models.Response;
 import com.example.ecommerceapp.retrofit.RetrofitService;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ProductService {
     private static ProductService productService;
@@ -20,9 +24,12 @@ public class ProductService {
     private List<Product> boughProducts;
     private List<Integer> quantities;
 
+    private Map<String, File> localFiles;
+
     private ProductService() {
         RetrofitService retrofitService = new RetrofitService();
         productController = retrofitService.getRetrofit().create(ProductController.class);
+        localFiles = new HashMap<>();
     }
 
     public static ProductService getInstance() {
@@ -30,15 +37,19 @@ public class ProductService {
         return productService;
     }
 
+    public void calculateProducts() {
+        bestSellerProducts = new ArrayList<>(products);
+        mostReviewedProducts = new ArrayList<>(products);
+        bestSellerProducts.sort((p1, p2) -> Integer.compare(p2.getNumberOfOrders(), p1.getNumberOfOrders()));
+        bestSellerProducts = bestSellerProducts.subList(0, Math.min(bestSellerProducts.size(), 4));
+        mostReviewedProducts.sort((p1, p2) -> Integer.compare(p2.getNumberOfOrders(), p1.getNumberOfOrders()));
+        mostReviewedProducts = mostReviewedProducts.subList(0, Math.min(mostReviewedProducts.size(), 2));
+    }
+
     public List<Product> findAll() {
         try {
-            products = productController.findAll().execute().body();
-            bestSellerProducts = new ArrayList<>(products);
-            mostReviewedProducts = new ArrayList<>(products);
-            bestSellerProducts.sort((p1, p2) -> Integer.compare(p2.getNumberOfOrders(), p1.getNumberOfOrders()));
-            bestSellerProducts = bestSellerProducts.subList(0, Math.min(bestSellerProducts.size(), 4));
-            mostReviewedProducts.sort((p1, p2) -> Integer.compare(p2.getNumberOfOrders(), p1.getNumberOfOrders()));
-            mostReviewedProducts = mostReviewedProducts.subList(0, Math.min(mostReviewedProducts.size(), 2));
+            products = productController.findAll().execute().body().stream().filter(product -> !product.isDeleted()).collect(Collectors.toList());
+            calculateProducts();
             return products;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -105,5 +116,9 @@ public class ProductService {
 
     public void setQuantities(List<Integer> quantities) {
         this.quantities = quantities;
+    }
+
+    public Map<String, File> getLocalFiles() {
+        return localFiles;
     }
 }

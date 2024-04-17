@@ -16,6 +16,7 @@ import com.example.ecommerceapp.R;
 import com.example.ecommerceapp.activities.MainActivity;
 import com.example.ecommerceapp.models.Statistic;
 import com.example.ecommerceapp.services.LoginManager;
+import com.example.ecommerceapp.services.ProductService;
 import com.example.ecommerceapp.services.StatisticService;
 import com.example.ecommerceapp.services.UserService;
 
@@ -57,6 +58,7 @@ public class AdminSettingsFragment extends Fragment {
     private void logout() {
         LoginManager.removeCredentials(mainActivity);
         UserService.getInstance().setUser(null);
+        ProductService.getInstance().calculateProducts();
         mainActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         mainActivity.replaceFragment(new HomeFragment(), "Home", true);
         mainActivity.invalidateOptionsMenu();

@@ -350,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initComponents();
-        drawerLayout.setVisibility(View.INVISIBLE);
+        drawerLayout.setVisibility(View.GONE);
         initToolbar();
         initDrawer();
         Thread checkLoggedInThread = checkLoggedIn();

@@ -8,7 +8,9 @@
     <RelativeLayout
         android:id="@+id/home_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="visible">
+
 
         <TextView
             android:id="@+id/best_sellers_title"
@@ -49,7 +51,7 @@
                 android:layout_height="164dp"
                 android:layout_marginBottom="50dp"
                 android:contentDescription="@string/content_description"
-                app:srcCompat="@drawable/ss" />
+                app:srcCompat="@drawable/error_loading_image" />
 
             <TextView
                 android:id="@+id/best_seller_label_1"
@@ -92,7 +94,7 @@
                 android:layout_height="164dp"
                 android:layout_marginBottom="50dp"
                 android:contentDescription="@string/content_description"
-                app:srcCompat="@drawable/avatar_1" />
+                app:srcCompat="@drawable/error_loading_image" />
 
             <TextView
                 android:id="@+id/best_seller_label_2"
@@ -135,7 +137,7 @@
                 android:layout_height="164dp"
                 android:layout_marginBottom="50dp"
                 android:contentDescription="@string/content_description"
-                app:srcCompat="@drawable/avatar_1" />
+                app:srcCompat="@drawable/error_loading_image" />
 
             <TextView
                 android:id="@+id/best_seller_label_3"
@@ -178,7 +180,7 @@
                 android:layout_height="164dp"
                 android:layout_marginBottom="50dp"
                 android:contentDescription="@string/content_description"
-                app:srcCompat="@drawable/avatar_1" />
+                app:srcCompat="@drawable/error_loading_image" />
 
             <TextView
                 android:id="@+id/best_seller_label_4"
@@ -338,7 +340,7 @@
                 android:layout_height="164dp"
                 android:layout_marginBottom="50dp"
                 android:contentDescription="@string/content_description"
-                app:srcCompat="@drawable/avatar_1" />
+                app:srcCompat="@drawable/error_loading_image" />
 
             <TextView
                 android:id="@+id/most_reviewed_label_1"
@@ -381,7 +383,7 @@
                 android:layout_height="164dp"
                 android:layout_marginBottom="50dp"
                 android:contentDescription="@string/content_description"
-                app:srcCompat="@drawable/avatar_1" />
+                app:srcCompat="@drawable/error_loading_image" />
 
             <TextView
                 android:id="@+id/most_reviewed_label_2"

@@ -3,6 +3,8 @@ package com.example.ecommerceapp.adapters;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +23,11 @@ import com.example.ecommerceapp.models.Product;
 import com.example.ecommerceapp.models.Review;
 import com.example.ecommerceapp.services.CartItemService;
 import com.example.ecommerceapp.services.CartService;
+import com.example.ecommerceapp.services.ProductService;
 import com.example.ecommerceapp.services.ReviewService;
 import com.example.ecommerceapp.services.UserService;
 
+import java.io.File;
 import java.util.List;
 
 import io.github.muddz.styleabletoast.StyleableToast;
@@ -84,6 +88,16 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemViewHolder> {
         thread.start();
     }
 
+    private void displayImage(CartItemViewHolder holder, Product product) {
+        File localFile = ProductService.getInstance().getLocalFiles().get(product.getLabel());
+        if (localFile == null || localFile.length() == 0) {
+            holder.cartItemImage.setImageResource(R.drawable.error_loading_image);
+        } else {
+            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+            holder.cartItemImage.setImageBitmap(bitmap);
+        }
+    }
+
     @NonNull
     @Override
     public CartItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -94,7 +108,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull CartItemViewHolder holder, int position) {
         CartItem cartItem = cartItems.get(position);
-        holder.cartItemImage.setImageResource(R.drawable.avatar_1);
+        displayImage(holder, cartItem.getProduct());
         holder.orderItemLabel.setText(cartItem.getProduct().getLabel());
         holder.orderItemQuantity.setText("Quantity : " + cartItem.getQuantity());
         holder.orderItemTotal.setText("$" + cartItem.getQuantity() * cartItem.getProduct().getPrice());

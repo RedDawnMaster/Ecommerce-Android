@@ -6,7 +6,7 @@ public class Product {
     private Long id;
     private String label;
     private String description;
-    private String image;
+    private boolean deleted;
     private double price;
     private double stars;
     private int evaluationCount;
@@ -39,12 +39,12 @@ public class Product {
         this.description = description;
     }
 
-    public String getImage() {
-        return image;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public double getPrice() {

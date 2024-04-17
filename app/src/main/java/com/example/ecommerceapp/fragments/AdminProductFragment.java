@@ -5,9 +5,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,7 @@ import com.example.ecommerceapp.services.ProductService;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +68,9 @@ public class AdminProductFragment extends Fragment {
 
     private MainActivity mainActivity;
     private Uri selectedImageUri;
-    boolean imageResult;
+    boolean imageUploadResult;
+    Drawable oldDrawable;
+    private File localFile;
 
 
     ActivityResultLauncher<Intent> imageChooserActivity
@@ -130,6 +135,33 @@ public class AdminProductFragment extends Fragment {
         mainActivity = (MainActivity) getContext();
     }
 
+    @SuppressLint("SetTextI18n")
+    private void bindData() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        reviewAdapter = new ReviewAdapter(getContext(), noReviewsAdmin, product, productRatingBarAdmin, productEvaluationAdmin, productAdapter, this.reviews);
+        recyclerView.setAdapter(reviewAdapter);
+        if (product != null) {
+//            downloadImageFirebase();
+            displayImage();
+            productRatingBarAdmin.setRating((float) product.getStars());
+            productEvaluationAdmin.setText("(" + product.getEvaluationCount() + ")");
+            productLabelValueAdmin.setText(product.getLabel());
+            productDescriptionValueAdmin.setText(product.getDescription());
+            productCategoryValueAdmin.setText(product.getCategory().getLabel());
+            productPriceValueAdmin.setText(String.valueOf(product.getPrice()));
+            productStockValueAdmin.setText(String.valueOf(product.getStock()));
+            productOrdersValueAdmin.setText(String.valueOf(product.getNumberOfOrders()));
+        }
+        if (this.reviews.isEmpty()) {
+            ViewGroup.LayoutParams layoutParams = recyclerView.getLayoutParams();
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            recyclerView.setLayoutParams(layoutParams);
+            noReviewsAdmin.setVisibility(View.VISIBLE);
+        }
+        uploadImage.setOnClickListener(v -> imageChooser());
+        saveProductButton.setOnClickListener(v -> saveProduct());
+    }
+
     private boolean checkCategory(String oldCategory, String newCategory) {
         boolean bool = true;
         if (!oldCategory.equalsIgnoreCase(newCategory)) {
@@ -191,6 +223,7 @@ public class AdminProductFragment extends Fragment {
             StyleableToast.makeText(mainActivity, "Please enter a valid stock amount", R.style.Failure).show();
         else if (product != null) {
             Long id = product.getId();
+            String oldLabel = product.getLabel();
             String oldCategory = product.getCategory().getLabel();
             product.setLabel(productLabelValueAdminString);
             product.setDescription(productDescriptionValueAdminString);
@@ -211,6 +244,12 @@ public class AdminProductFragment extends Fragment {
                 } else {
                     mainActivity.runOnUiThread(() -> {
                         applyToProduct(product.getId());
+                        if (!oldLabel.equals(product.getLabel())) {
+                            uploadImageFirebase();
+                            deleteImageFirebase(oldLabel);
+                        } else if (oldDrawable != productImageAdmin.getDrawable()) {
+                            uploadImageFirebase();
+                        }
                         Fragment fragmentProducts = mainActivity.getSupportFragmentManager().findFragmentByTag("Products");
                         if (fragmentProducts != null) {
                             ((ProductListFragment) fragmentProducts).getProductAdapter().notifyDataSetChanged();
@@ -252,70 +291,13 @@ public class AdminProductFragment extends Fragment {
                     product = null;
                 } else {
                     mainActivity.runOnUiThread(() -> {
-                        uploadImageFirebase();
-                        if (imageResult) {
-                            ProductService.getInstance().getProducts().add(result);
-                            product = result;
-                            Fragment fragmentProducts = mainActivity.getSupportFragmentManager().findFragmentByTag("Products");
-                            if (fragmentProducts != null) {
-                                ((ProductListFragment) fragmentProducts).getProductAdapter().notifyDataSetChanged();
-                            }
-                            Fragment fragmentCategory = mainActivity.getSupportFragmentManager().findFragmentByTag(product.getCategory().getLabel());
-                            if (fragmentCategory != null) {
-                                ((ProductListFragment) fragmentCategory).getProductAdapter().getProducts().add(result);
-                                ((ProductListFragment) fragmentCategory).getProductAdapter().notifyDataSetChanged();
-                            }
-                            StyleableToast.makeText(mainActivity, "Product saved", R.style.Success).show();
-                            product = null;
-                            productImageAdmin.setImageDrawable(null);
-                            productLabelValueAdmin.setText("");
-                            productDescriptionValueAdmin.setText("");
-                            productCategoryValueAdmin.setText("");
-                            productPriceValueAdmin.setText("");
-                            productStockValueAdmin.setText("");
-                            productOrdersValueAdmin.setText("0");
-                        } else {
-                            Thread threadDelete = new Thread(() -> {
-                                ProductService.getInstance().deleteByLabel(product.getLabel());
-                                product = null;
-                                mainActivity.runOnUiThread(() -> StyleableToast.makeText(mainActivity, "Image upload failed", R.style.Failure).show());
-                            });
-                            threadDelete.start();
-                        }
+                        uploadImageNewFirebase(result);
                     });
                 }
-
             });
             thread.start();
         }
 
-    }
-
-
-    @SuppressLint("SetTextI18n")
-    private void bindData() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        reviewAdapter = new ReviewAdapter(getContext(), noReviewsAdmin, product, productRatingBarAdmin, productEvaluationAdmin, productAdapter, this.reviews);
-        recyclerView.setAdapter(reviewAdapter);
-        if (product != null) {
-            productImageAdmin.setImageResource(R.drawable.avatar_1);
-            productRatingBarAdmin.setRating((float) product.getStars());
-            productEvaluationAdmin.setText("(" + product.getEvaluationCount() + ")");
-            productLabelValueAdmin.setText(product.getLabel());
-            productDescriptionValueAdmin.setText(product.getDescription());
-            productCategoryValueAdmin.setText(product.getCategory().getLabel());
-            productPriceValueAdmin.setText(String.valueOf(product.getPrice()));
-            productStockValueAdmin.setText(String.valueOf(product.getStock()));
-            productOrdersValueAdmin.setText(String.valueOf(product.getNumberOfOrders()));
-        }
-        if (this.reviews.isEmpty()) {
-            ViewGroup.LayoutParams layoutParams = recyclerView.getLayoutParams();
-            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            recyclerView.setLayoutParams(layoutParams);
-            noReviewsAdmin.setVisibility(View.VISIBLE);
-        }
-        uploadImage.setOnClickListener(v -> imageChooser());
-        saveProductButton.setOnClickListener(v -> saveProduct());
     }
 
 
@@ -328,25 +310,143 @@ public class AdminProductFragment extends Fragment {
 
     private void uploadImageFirebase() {
         ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setTitle("Uploading Image...");
+        progressDialog.setTitle("Saving product...");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("images/" + product.getLabel());
         storageReference.putFile(selectedImageUri).addOnSuccessListener(taskSnapshot -> {
             if (progressDialog.isShowing()) progressDialog.dismiss();
-            imageResult = true;
+            oldDrawable = productImageAdmin.getDrawable();
+            ProductService.getInstance().getLocalFiles().remove(product.getLabel());
         }).addOnFailureListener(e -> {
             if (progressDialog.isShowing()) progressDialog.dismiss();
-            imageResult = false;
+            StyleableToast.makeText(mainActivity, "Uploading image failed", R.style.Failure).show();
+        });
+    }
+
+    private void uploadImageNewFirebase(Product result) {
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Saving product...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("images/" + product.getLabel());
+        storageReference.putFile(selectedImageUri).addOnSuccessListener(taskSnapshot -> {
+            if (progressDialog.isShowing()) progressDialog.dismiss();
+            oldDrawable = productImageAdmin.getDrawable();
+            ProductService.getInstance().getProducts().add(result);
+            product = result;
+            Fragment fragmentProducts = mainActivity.getSupportFragmentManager().findFragmentByTag("Products");
+            if (fragmentProducts != null) {
+                ((ProductListFragment) fragmentProducts).getProductAdapter().notifyDataSetChanged();
+            }
+            Fragment fragmentCategory = mainActivity.getSupportFragmentManager().findFragmentByTag(product.getCategory().getLabel());
+            if (fragmentCategory != null) {
+                ((ProductListFragment) fragmentCategory).getProductAdapter().getProducts().add(result);
+                ((ProductListFragment) fragmentCategory).getProductAdapter().notifyDataSetChanged();
+            }
+            StyleableToast.makeText(mainActivity, "Product saved", R.style.Success).show();
+            product = null;
+            productImageAdmin.setImageDrawable(null);
+            productLabelValueAdmin.setText("");
+            productDescriptionValueAdmin.setText("");
+            productCategoryValueAdmin.setText("");
+            productPriceValueAdmin.setText("");
+            productStockValueAdmin.setText("");
+            productOrdersValueAdmin.setText("0");
+        }).addOnFailureListener(e -> {
+            if (progressDialog.isShowing()) progressDialog.dismiss();
+            imageUploadResult = false;
+            StyleableToast.makeText(mainActivity, "Uploading image failed", R.style.Failure).show();
+            Thread threadDelete = new Thread(() -> {
+                ProductService.getInstance().deleteByLabel(product.getLabel());
+                product = null;
+                mainActivity.runOnUiThread(() -> StyleableToast.makeText(mainActivity, "Saving product failed", R.style.Failure).show());
+            });
+            threadDelete.start();
+        });
+    }
+
+    private void displayImage() {
+        localFile = ProductService.getInstance().getLocalFiles().get(product.getLabel());
+        if (localFile == null || localFile.length() == 0) {
+            downloadImageFirebase();
+        } else {
+            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+            selectedImageUri = Uri.fromFile(localFile);
+            productImageAdmin.setImageBitmap(bitmap);
+            oldDrawable = productImageAdmin.getDrawable();
+        }
+    }
+
+    private void downloadImageFirebase() {
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Loading product...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("images/" + product.getLabel());
+        try {
+            localFile = File.createTempFile(product.getLabel(), ".jpeg");
+            storageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                if (progressDialog.isShowing()) progressDialog.dismiss();
+                ProductService.getInstance().getLocalFiles().put(product.getLabel(), localFile);
+                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                selectedImageUri = Uri.fromFile(localFile);
+                productImageAdmin.setImageBitmap(bitmap);
+                oldDrawable = productImageAdmin.getDrawable();
+                Fragment fragmentProducts = mainActivity.getSupportFragmentManager().findFragmentByTag("Products");
+                if (fragmentProducts != null) {
+                    ((ProductListFragment) fragmentProducts).getProductAdapter().notifyDataSetChanged();
+                }
+                Fragment fragmentCategory = mainActivity.getSupportFragmentManager().findFragmentByTag(product.getCategory().getLabel());
+                if (fragmentCategory != null) {
+                    ((ProductListFragment) fragmentCategory).getProductAdapter().notifyDataSetChanged();
+                }
+                Fragment fragmentOrderItems = mainActivity.getSupportFragmentManager().findFragmentByTag("OrderItems");
+                if (fragmentOrderItems != null) {
+                    ((OrderItemListFragment) fragmentOrderItems).getOrderItemAdapter().notifyDataSetChanged();
+                }
+                Fragment fragmentCart = mainActivity.getSupportFragmentManager().findFragmentByTag("Cart");
+                if (fragmentCart != null) {
+                    ((CartItemListFragment) fragmentCart).getCartItemAdapter().notifyDataSetChanged();
+                }
+            }).addOnFailureListener(e -> {
+                if (progressDialog.isShowing()) progressDialog.dismiss();
+                StyleableToast.makeText(mainActivity, "Fetching Product failed", R.style.Failure).show();
+                final Handler handler = new Handler();
+                handler.postDelayed(() -> mainActivity.getSupportFragmentManager().popBackStackImmediate(), 500);
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void deleteImageFirebase(String oldLabel) {
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Processing...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("images/" + oldLabel);
+        storageReference.delete().addOnSuccessListener(unused -> {
+            if (progressDialog.isShowing()) progressDialog.dismiss();
+        }).addOnFailureListener(e -> {
+            if (progressDialog.isShowing()) progressDialog.dismiss();
         });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_admin_product, container, false);
         initComponents(view);
         bindData();
         return view;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public ImageView getProductImageAdmin() {
+        return productImageAdmin;
     }
 }

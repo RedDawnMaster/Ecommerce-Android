@@ -1,6 +1,7 @@
 package com.example.ecommerceapp.adapters;
 
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -20,6 +21,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
     TextView productDescription;
     TextView productPrice;
     TextView productOrders;
+    ImageButton deleteProduct;
 
     public ProductViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -31,6 +33,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
         productDescription = itemView.findViewById(R.id.product_list_description);
         productPrice = itemView.findViewById(R.id.product_list_price);
         productOrders = itemView.findViewById(R.id.product_list_orders);
+        deleteProduct = itemView.findViewById(R.id.delete_product_button);
     }
 
 }

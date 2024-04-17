@@ -15,7 +15,7 @@
         android:layout_marginTop="10dp"
         android:contentDescription="@string/content_description"
         android:layout_marginBottom="10dp"
-        app:srcCompat="@drawable/avatar_1" />
+        app:srcCompat="@drawable/error_loading_image" />
 
     <TextView
         android:id="@+id/order_item_label"

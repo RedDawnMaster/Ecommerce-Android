@@ -1,8 +1,12 @@
 package com.example.ecommerceapp.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +34,11 @@ import com.example.ecommerceapp.services.CartService;
 import com.example.ecommerceapp.services.ProductService;
 import com.example.ecommerceapp.services.ReviewService;
 import com.example.ecommerceapp.services.UserService;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -198,9 +206,55 @@ public class ProductFragment extends Fragment {
         }
     }
 
+    private void displayImage() {
+        File localFile = ProductService.getInstance().getLocalFiles().get(product.getLabel());
+        if (localFile == null || localFile.length() == 0) {
+            downloadImageFirebase();
+        } else {
+            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+            productImage.setImageBitmap(bitmap);
+        }
+    }
+
+    private void downloadImageFirebase() {
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Loading product...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("images/" + product.getLabel());
+        try {
+            File localFile = File.createTempFile(product.getLabel(), ".jpeg");
+            storageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                if (progressDialog.isShowing()) progressDialog.dismiss();
+                ProductService.getInstance().getLocalFiles().put(product.getLabel(), localFile);
+                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                productImage.setImageBitmap(bitmap);
+                Fragment fragmentCategory = mainActivity.getSupportFragmentManager().findFragmentByTag(product.getCategory().getLabel());
+                if (fragmentCategory != null) {
+                    ((ProductListFragment) fragmentCategory).getProductAdapter().notifyDataSetChanged();
+                }
+                Fragment fragmentOrderItems = mainActivity.getSupportFragmentManager().findFragmentByTag("OrderItems");
+                if (fragmentOrderItems != null) {
+                    ((OrderItemListFragment) fragmentOrderItems).getOrderItemAdapter().notifyDataSetChanged();
+                }
+                Fragment fragmentCart = mainActivity.getSupportFragmentManager().findFragmentByTag("Cart");
+                if (fragmentCart != null) {
+                    ((CartItemListFragment) fragmentCart).getCartItemAdapter().notifyDataSetChanged();
+                }
+            }).addOnFailureListener(e -> {
+                if (progressDialog.isShowing()) progressDialog.dismiss();
+                StyleableToast.makeText(mainActivity, "Fetching Product failed", R.style.Failure).show();
+                final Handler handler = new Handler();
+                handler.postDelayed(() -> mainActivity.getSupportFragmentManager().popBackStackImmediate(), 500);
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     private void bindData() {
-        productImage.setImageResource(R.drawable.avatar_1);
+        displayImage();
         productLabel.setText(product.getLabel());
         productRating.setRating((float) product.getStars());
         productEvaluation.setText("(" + product.getEvaluationCount() + ")");
@@ -235,5 +289,13 @@ public class ProductFragment extends Fragment {
             noReviews.setVisibility(View.VISIBLE);
         }
         return view;
+    }
+
+    public ImageView getProductImage() {
+        return productImage;
+    }
+
+    public TextView getProductLabel() {
+        return productLabel;
     }
 }

@@ -3,6 +3,8 @@ package com.example.ecommerceapp.adapters;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import com.example.ecommerceapp.services.ProductService;
 import com.example.ecommerceapp.services.ReviewService;
 import com.example.ecommerceapp.services.UserService;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +56,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemViewHolder> 
         for (OrderItem orderItem : order.getOrderItems()) {
             total += orderItem.getQuantity() * orderItem.getProduct().getPrice();
         }
+        total += order.getDeletedProductsTotal();
         order.setTotal(total);
     }
 
@@ -73,8 +77,10 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemViewHolder> 
             Thread thread = new Thread(() -> {
                 OrderItemService.getInstance().refund(orderItem.getProduct().getLabel(), order.getReference());
                 order.getOrderItems().remove(orderItem);
-                Product product = findProduct(orderItem);
-                product.setNumberOfOrders(product.getNumberOfOrders() - orderItem.getQuantity());
+                if (!orderItem.getProduct().isDeleted()) {
+                    Product product = findProduct(orderItem);
+                    product.setNumberOfOrders(product.getNumberOfOrders() - orderItem.getQuantity());
+                }
                 mainActivity.runOnUiThread(() -> {
                     OrderItemAdapter.this.notifyItemRemoved(position);
                     if (order.getOrderItems().isEmpty()) {
@@ -85,7 +91,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemViewHolder> 
                         updateTotal(foundOrder);
                     }
                     orderAdapter.notifyDataSetChanged();
-                    Fragment fragment = mainActivity.getSupportFragmentManager().findFragmentByTag(product.getCategory().getLabel());
+                    Fragment fragment = mainActivity.getSupportFragmentManager().findFragmentByTag(orderItem.getProduct().getCategory().getLabel());
                     if (fragment != null) {
                         ((ProductListFragment) fragment).getProductAdapter().notifyDataSetChanged();
                     }
@@ -114,6 +120,16 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemViewHolder> 
         thread.start();
     }
 
+    private void displayImage(OrderItemViewHolder holder, Product product) {
+        File localFile = ProductService.getInstance().getLocalFiles().get(product.getLabel());
+        if (localFile == null || localFile.length() == 0) {
+            holder.orderItemImage.setImageResource(R.drawable.error_loading_image);
+        } else {
+            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+            holder.orderItemImage.setImageBitmap(bitmap);
+        }
+    }
+
 
     @NonNull
     @Override
@@ -125,8 +141,11 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull OrderItemViewHolder holder, int position) {
         OrderItem orderItem = orderItems.get(position);
-        holder.orderItemImage.setImageResource(R.drawable.avatar_1);
-        holder.orderItemLabel.setText(orderItem.getProduct().getLabel());
+        displayImage(holder, orderItem.getProduct());
+        if (orderItem.getProduct().isDeleted())
+            holder.orderItemLabel.setText(orderItem.getProduct().getLabel() + " (DELETED)");
+        else
+            holder.orderItemLabel.setText(orderItem.getProduct().getLabel());
         holder.orderItemQuantity.setText("Quantity : " + orderItem.getQuantity());
         holder.orderItemTotal.setText("$" + orderItem.getQuantity() * orderItem.getProduct().getPrice());
         if (UserService.getInstance().getUser().getRole().equals("ADMIN"))
@@ -137,7 +156,8 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemViewHolder> 
             holder.refundButton.setAlpha(0.5f);
             holder.refundButton.setClickable(false);
         }
-        holder.relativeLayout.setOnClickListener(v -> showProduct(orderItem.getProduct()));
+        if (!orderItem.getProduct().isDeleted())
+            holder.relativeLayout.setOnClickListener(v -> showProduct(orderItem.getProduct()));
     }
 
     @Override
