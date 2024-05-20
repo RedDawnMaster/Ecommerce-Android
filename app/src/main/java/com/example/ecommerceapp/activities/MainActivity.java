@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     private void initToolbar() {
-        toolbar.setTitle("E-App");
+        toolbar.setTitle("E-Shop");
         setSupportActionBar(toolbar);
     }
 

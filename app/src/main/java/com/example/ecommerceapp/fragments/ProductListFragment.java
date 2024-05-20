@@ -122,12 +122,12 @@ public class ProductListFragment extends Fragment {
                         }
                         Fragment fragmentProduct = mainActivity.getSupportFragmentManager().findFragmentByTag("Product");
                         if (fragmentProduct != null) {
-                            if (fragmentProduct instanceof AdminProductFragment && ((AdminProductFragment) fragmentCart).getProduct() != null && ((AdminProductFragment) fragmentCart).getProduct().getLabel().equalsIgnoreCase(product.getLabel())) {
+                            if (fragmentProduct instanceof AdminProductFragment && ((AdminProductFragment) fragmentProduct).getProduct() != null && ((AdminProductFragment) fragmentProduct).getProduct().getLabel().equalsIgnoreCase(product.getLabel())) {
                                 Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                                ((AdminProductFragment) fragmentCart).getProductImageAdmin().setImageBitmap(bitmap);
-                            } else if (((ProductFragment) fragmentCart).getProductLabel().getText().toString().equalsIgnoreCase(product.getLabel())) {
+                                ((AdminProductFragment) fragmentProduct).getProductImageAdmin().setImageBitmap(bitmap);
+                            } else if (((ProductFragment) fragmentProduct).getProductLabel().getText().toString().equalsIgnoreCase(product.getLabel())) {
                                 Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                                ((ProductFragment) fragmentCart).getProductImage().setImageBitmap(bitmap);
+                                ((ProductFragment) fragmentProduct).getProductImage().setImageBitmap(bitmap);
                             }
                         }
                     }).addOnFailureListener(e -> {
